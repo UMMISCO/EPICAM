@@ -1,0 +1,114 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+
+
+
+
+
+
+«DEFINE layout FOR FieldEntity-»
+<org.imogene.android.widget.field.edit.«EXPAND android::template::EditorUtils::classInLayout FOR this-»
+	style="@style/BaseField"
+	android:id="@+id/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»"
+	app:dependent="«fieldDependentVisibility.size > 0»"
+	app:readOnly="«readOnly»"
+	app:required="«required»"
+	app:hidden="«hidden»"
+	app:title="@string/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»"
+	«IF hasHelp(descriptions)-»
+	app:help="@string/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_help"
+	«ENDIF-»
+	«EXPAND specificAttributes FOR this-»
+/>
+«ENDDEFINE»
+
+
+
+
+
+
+
+«DEFINE specificAttributes FOR FieldEntity-»
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR TextField-»
+app:stringType="string"
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR AddressField-»
+app:stringType="address"
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR EmailField-»
+app:stringType="email"
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR PhoneField-»
+app:stringType="phone"
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR TextAreaField-»
+app:stringType="text"
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR GeoField-»
+«LET getGeoType(this) AS geoType-»
+«IF geoType == 0»
+app:geoType="gps"
+«ELSEIF geoType == 1»
+app:geoType="network"
+«ELSEIF geoType == 2»
+app:geoType="map"
+«ELSEIF geoType == 3»
+app:geoType="best"
+«ENDIF»
+«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR FloatField-»
+«IF unit.length > 0-»
+app:unit="@string/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_unit"
+«ENDIF-»
+app:format="@string/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_format"
+«IF max != null && max.length > 0-»
+app:floatMax="«max»"
+«ENDIF-»
+«IF min != null && min.length > 0-»
+app:floatMin="«min»"
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR IntegerField-»
+«IF unit.length > 0-»
+app:unit="@string/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_unit"
+«ENDIF-»
+app:format="@string/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_format"
+«IF max != null && max.length > 0-»
+app:intMax="«max»"
+«ENDIF-»
+«IF min != null && min.length > 0-»
+app:intMin="«min»"
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR EnumField-»
+app:items="@array/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»"
+app:itemsValues="@array/«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_values"
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR DatesField-»
+«IF max != null && max.length > 0-»
+app:dateMax="«max»"
+«ENDIF-»
+«IF min != null && min.length > 0-»
+app:dateMin="«min»"
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE specificAttributes FOR RelationFieldEntity-»
+app:hasReverse="«oppositeRelationField != null»"
+app:display="@string/imog__numberOfEntities"
+app:oppositeCardinality="«getOppositeCardinality(this)-»"
+app:relationType="«IF MainRelationFieldEntity.isAssignableFrom(metaType)»main«ELSE»reverse«ENDIF»"
+«ENDDEFINE»

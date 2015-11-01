@@ -1,0 +1,2272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 4.3.1.v201309091055 Build &lt;4.3.1.v20130917-1035></property>
+    <simple-property-list name="includeResource">
+        <value>atbRegister</value>
+        <value>atbRegister_fr</value>
+        <value>atbRegister_en</value>
+    </simple-property-list>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/chart_listing.gif</property>
+    <property name="cheatSheet">org.eclipse.birt.report.designer.ui.cheatsheet.chartlisting</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <property name="imageDPI">96</property>
+    <parameters>
+        <scalar-parameter name="loc" id="142">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="region" id="260">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="district" id="261">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="cdt" id="262">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="patient" id="1117">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="trimestre" id="263">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="annee" id="264">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="dateDebut" id="265">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="dateFin" id="266">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="personnel" id="1118">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+        <scalar-parameter name="laboratoire" id="1119">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <script-data-source name="ReportHandler" id="39"/>
+    </data-sources>
+    <data-sets>
+        <script-data-set name="RepDataSet" id="41">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnNumRegTB</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnNom</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnSexe</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">columnAge</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">columnAdresse</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">columnDateDebutTrait</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">columnNomCDT</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">8</property>
+                    <property name="name">columnFormeMaladie</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">9</property>
+                    <property name="name">columnTypePatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">10</property>
+                    <property name="name">columnObservations</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">11</property>
+                    <property name="name">columnCDT</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnNumRegTB</property>
+                    <text-property name="displayName">columnNumRegTB</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnNom</property>
+                    <text-property name="displayName">columnNom</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnSexe</property>
+                    <text-property name="displayName">columnSexe</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnAge</property>
+                    <text-property name="displayName">columnAge</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnAdresse</property>
+                    <text-property name="displayName">columnAdresse</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateDebutTrait</property>
+                    <text-property name="displayName">columnDateDebutTrait</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnNomCDT</property>
+                    <text-property name="displayName">columnNomCDT</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnFormeMaladie</property>
+                    <text-property name="displayName">columnFormeMaladie</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnTypePatient</property>
+                    <text-property name="displayName">columnTypePatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnObservations</property>
+                    <text-property name="displayName">columnObservations</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnCDT</property>
+                    <text-property name="displayName">columnCDT</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnNumRegTB</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnNom</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnSexe</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">columnAge</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">columnAdresse</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">columnDateDebutTrait</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">columnNomCDT</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">columnFormeMaladie</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">9</property>
+                        <property name="name">columnTypePatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">10</property>
+                        <property name="name">columnObservations</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">11</property>
+                        <property name="name">columnCDT</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormPrincial("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+		
+		row["columnNumRegTB"] = bean.getColumnNumRegTB();
+		row["columnNom"] = bean.getColumnNom();
+		row["columnSexe"] = beanRenderer.getPatientEnumDisplayValue("sexe", bean.getColumnSexe());
+		row["columnAge"] = bean.getColumnAge();
+		row["columnAdresse"] = bean.getColumnAdresse();
+		
+		row["columnDateDebutTrait"] = bean.getColumnDateDebutTrait();
+		row["columnNomCDT"] = bean.getColumnCDT();
+		
+		row["columnFormeMaladie"] = beanRenderer.getCasTuberculoseEnumDisplayValue("formeMaladie", bean.getColumnFormeMaladie());
+		row["columnTypePatient"] = beanRenderer.getCasTuberculoseEnumDisplayValue("typePatient", bean.getColumnTypePatient());
+		
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="BiologiqueDataSet" id="1706">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnDataPoidPatient</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnPoidsPatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnDataPoidPatient</property>
+                    <text-property name="displayName">columnDataPoidPatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnPoidsPatient</property>
+                    <text-property name="displayName">columnPoidsPatient</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnDataPoidPatient</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnPoidsPatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormBiologique("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+				
+		row["columnDataPoidPatient"] = bean.getColumnDataPoidPatient();
+		row["columnPoidsPatient"] = bean.getColumnPoidsPatient();
+		
+		count++;
+		
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="TreatmentInitRepDataSet" id="1771">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnRegimePhaseInitiale</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnMedicamentsPhaseInitiale</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnDateEffectivePhaseInitiale</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">columnDateFinMedicamentsPhaseInitiale</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">columnQuantiteMedicamentPhaseInitiale</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnRegimePhaseInitiale</property>
+                    <text-property name="displayName">columnRegimePhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnMedicamentsPhaseInitiale</property>
+                    <text-property name="displayName">columnMedicamentsPhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateEffectivePhaseInitiale</property>
+                    <text-property name="displayName">columnDateEffectivePhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateFinMedicamentsPhaseInitiale</property>
+                    <text-property name="displayName">columnDateFinMedicamentsPhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnQuantiteMedicamentPhaseInitiale</property>
+                    <text-property name="displayName">columnQuantiteMedicamentPhaseInitiale</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnRegimePhaseInitiale</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnMedicamentsPhaseInitiale</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnDateEffectivePhaseInitiale</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">columnDateFinMedicamentsPhaseInitiale</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">columnQuantiteMedicamentPhaseInitiale</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormTraitementInit("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+
+		row["columnMedicamentsPhaseInitiale"] = bean.getColumnMedicamentsPhaseInitiale();
+		row["columnDateEffectivePhaseInitiale"] = bean.getColumnDateEffectivePhaseInitiale();
+		row["columnDateFinMedicamentsPhaseInitiale"] = bean.getColumnDateFinMedicamentsPhaseInitiale();
+		row["columnQuantiteMedicamentPhaseInitiale"] = bean.getColumnQuantiteMedicamentPhaseInitiale();
+		row["columnRegimePhaseInitiale"] = bean.getColumnRegimePhaseInitiale();
+		
+		
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="TreatmentContRepDataSet" id="2055">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnRegimePhaseContinuation</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnMedicamentsPhaseContinuation</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnDateEffectivePhaseContinuation</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">columnDateFinMedicamentsPhaseContinuation</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">columnQuantiteMedicamentPhaseContinuation</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnRegimePhaseContinuation</property>
+                    <text-property name="displayName">columnRegimePhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnMedicamentsPhaseContinuation</property>
+                    <text-property name="displayName">columnMedicamentsPhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateEffectivePhaseContinuation</property>
+                    <text-property name="displayName">columnDateEffectivePhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateFinMedicamentsPhaseContinuation</property>
+                    <text-property name="displayName">columnDateFinMedicamentsPhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnQuantiteMedicamentPhaseContinuation</property>
+                    <text-property name="displayName">columnQuantiteMedicamentPhaseContinuation</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnRegimePhaseContinuation</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnMedicamentsPhaseContinuation</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnDateEffectivePhaseContinuation</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">columnDateFinMedicamentsPhaseContinuation</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">columnQuantiteMedicamentPhaseContinuation</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormTraitementInit("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+
+		row["columnMedicamentsPhaseContinuation"] = bean.getColumnMedicamentsPhaseContinuation();
+		row["columnDateEffectivePhaseContinuation"] = bean.getColumnDateEffectivePhaseContinuation();
+		row["columnDateFinMedicamentsPhaseContinuation"] = bean.getColumnDateFinMedicamentsPhaseContinuation();
+		row["columnQuantiteMedicamentPhaseContinuation"] = bean.getColumnQuantiteMedicamentPhaseContinuation();
+		row["columnRegimePhaseContinuation"] = bean.getColumnRegimePhaseContinuation();
+
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="RepDataSetParameters" id="2053">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnRegion</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnDistrict</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnCDT</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnRegion</property>
+                    <text-property name="displayName">columnRegion</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDistrict</property>
+                    <text-property name="displayName">columnDistrict</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnCDT</property>
+                    <text-property name="displayName">columnCDT</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnRegion</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnDistrict</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnCDT</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getRepParameters("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+		
+		row["columnRegion"] = bean.getColumnRegion();
+		row["columnDistrict"] = bean.getColumnDistrict();
+		row["columnCDT"] = bean.getColumnCDT();
+		
+
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="RepDataSet1111" id="2099">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnNumRegTB</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnNom</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnSexe</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">columnAge</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">columnAdresse</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">6</property>
+                    <property name="name">columnDateDebutTrait</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">7</property>
+                    <property name="name">columnNomCDT</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">8</property>
+                    <property name="name">columnDateExamenCrachat</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">9</property>
+                    <property name="name">columnResultatExamenCrachat</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">10</property>
+                    <property name="name">columnRaisonExamenCrachat</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">11</property>
+                    <property name="name">columnDataPoidPatient</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">12</property>
+                    <property name="name">columnPoidsPatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">13</property>
+                    <property name="name">columnFormeMaladie</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">14</property>
+                    <property name="name">columnTypePatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">15</property>
+                    <property name="name">columnRegimePhaseInitiale</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">16</property>
+                    <property name="name">columnMedicamentsPhaseInitiale</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">17</property>
+                    <property name="name">columnDateEffectivePhaseInitiale</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">18</property>
+                    <property name="name">columnDateFinMedicamentsPhaseInitiale</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">19</property>
+                    <property name="name">columnQuantiteMedicamentPhaseInitiale</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">20</property>
+                    <property name="name">columnRegimePhaseContinuation</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">21</property>
+                    <property name="name">columnMedicamentsPhaseContinuation</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">22</property>
+                    <property name="name">columnDateEffectivePhaseContinuation</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">23</property>
+                    <property name="name">columnDateFinMedicamentsPhaseContinuation</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">24</property>
+                    <property name="name">columnQuantiteMedicamentPhaseContinuation</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">25</property>
+                    <property name="name">columnObservations</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">26</property>
+                    <property name="name">columnDateRDV</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">27</property>
+                    <property name="name">columnHonoree</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnNumRegTB</property>
+                    <text-property name="displayName">columnNumRegTB</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnNom</property>
+                    <text-property name="displayName">columnNom</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnSexe</property>
+                    <text-property name="displayName">columnSexe</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnAge</property>
+                    <text-property name="displayName">columnAge</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnAdresse</property>
+                    <text-property name="displayName">columnAdresse</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateDebutTrait</property>
+                    <text-property name="displayName">columnDateDebutTrait</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnNomCDT</property>
+                    <text-property name="displayName">columnNomCDT</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateExamenCrachat</property>
+                    <text-property name="displayName">columnDateExamenCrachat</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnResultatExamenCrachat</property>
+                    <text-property name="displayName">columnResultatExamenCrachat</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnRaisonExamenCrachat</property>
+                    <text-property name="displayName">columnRaisonExamenCrachat</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDataPoidPatient</property>
+                    <text-property name="displayName">columnDataPoidPatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnPoidsPatient</property>
+                    <text-property name="displayName">columnPoidsPatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnFormeMaladie</property>
+                    <text-property name="displayName">columnFormeMaladie</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnTypePatient</property>
+                    <text-property name="displayName">columnTypePatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnRegimePhaseInitiale</property>
+                    <text-property name="displayName">columnRegimePhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnMedicamentsPhaseInitiale</property>
+                    <text-property name="displayName">columnMedicamentsPhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateEffectivePhaseInitiale</property>
+                    <text-property name="displayName">columnDateEffectivePhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateFinMedicamentsPhaseInitiale</property>
+                    <text-property name="displayName">columnDateFinMedicamentsPhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnQuantiteMedicamentPhaseInitiale</property>
+                    <text-property name="displayName">columnQuantiteMedicamentPhaseInitiale</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnRegimePhaseContinuation</property>
+                    <text-property name="displayName">columnRegimePhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnMedicamentsPhaseContinuation</property>
+                    <text-property name="displayName">columnMedicamentsPhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateEffectivePhaseContinuation</property>
+                    <text-property name="displayName">columnDateEffectivePhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateFinMedicamentsPhaseContinuation</property>
+                    <text-property name="displayName">columnDateFinMedicamentsPhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnQuantiteMedicamentPhaseContinuation</property>
+                    <text-property name="displayName">columnQuantiteMedicamentPhaseContinuation</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnObservations</property>
+                    <text-property name="displayName">columnObservations</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnDateRDV</property>
+                    <text-property name="displayName">columnDateRDV</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnHonoree</property>
+                    <text-property name="displayName">columnHonoree</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnNumRegTB</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnNom</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnSexe</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">columnAge</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">columnAdresse</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">columnDateDebutTrait</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">columnNomCDT</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">8</property>
+                        <property name="name">columnDateExamenCrachat</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">9</property>
+                        <property name="name">columnResultatExamenCrachat</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">10</property>
+                        <property name="name">columnRaisonExamenCrachat</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">11</property>
+                        <property name="name">columnDataPoidPatient</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">12</property>
+                        <property name="name">columnPoidsPatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">13</property>
+                        <property name="name">columnFormeMaladie</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">14</property>
+                        <property name="name">columnTypePatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">15</property>
+                        <property name="name">columnRegimePhaseInitiale</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">16</property>
+                        <property name="name">columnMedicamentsPhaseInitiale</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">17</property>
+                        <property name="name">columnDateEffectivePhaseInitiale</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">18</property>
+                        <property name="name">columnDateFinMedicamentsPhaseInitiale</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">19</property>
+                        <property name="name">columnQuantiteMedicamentPhaseInitiale</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">20</property>
+                        <property name="name">columnRegimePhaseContinuation</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">21</property>
+                        <property name="name">columnMedicamentsPhaseContinuation</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">22</property>
+                        <property name="name">columnDateEffectivePhaseContinuation</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">23</property>
+                        <property name="name">columnDateFinMedicamentsPhaseContinuation</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">24</property>
+                        <property name="name">columnQuantiteMedicamentPhaseContinuation</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">25</property>
+                        <property name="name">columnObservations</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">26</property>
+                        <property name="name">columnDateRDV</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">27</property>
+                        <property name="name">columnHonoree</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormPrincial("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+		
+		row["columnNumRegTB"] = bean.getColumnNumRegTB();
+		row["columnNom"] = bean.getColumnNom();
+		row["columnSexe"] = beanRenderer.getPatientEnumDisplayValue("sexe", bean.getColumnSexe());
+		row["columnAge"] = bean.getColumnAge();
+		row["columnAdresse"] = bean.getColumnAdresse();
+		
+		row["columnDateDebutTrait"] = bean.getColumnDateDebutTrait();
+		row["columnNomCDT"] = bean.getColumnNomCDT();
+		row["columnDateExamenCrachat"] = bean.getColumnDateExamenCrachat();
+		//row["columnResultatExamenCrachat"] = bean.getColumnResultatExamenCrachat();
+		//row["columnRaisonExamenCrachat"] = bean.getColumnRaisonExamenCrachat();
+		
+		
+		if (bean.getColumnRaisonExamenCrachat() != null)	
+			row["columnRaisonExamenCrachat"] = beanRenderer.getExamenMicroscopieEnumDisplayValue("raisonDepistage", bean.getColumnRaisonExamenCrachat());
+		if (bean.getColumnResultatExamenCrachat() != null)	
+			row["columnResultatExamenCrachat"] = beanRenderer.getExamenMicroscopieEnumDisplayValue("resultat", bean.getColumnResultatExamenCrachat());
+		
+		
+		row["columnDataPoidPatient"] = bean.getColumnDataPoidPatient();
+		row["columnPoidsPatient"] = bean.getColumnPoidsPatient();
+		row["columnFormeMaladie"] = beanRenderer.getCasTuberculoseEnumDisplayValue("formeMaladie", bean.getColumnFormeMaladie());
+		row["columnTypePatient"] = beanRenderer.getCasTuberculoseEnumDisplayValue("typePatient", bean.getColumnTypePatient());
+		row["columnRegimePhaseInitiale"] = bean.getColumnRegimePhaseInitiale();
+		
+
+		row["columnMedicamentsPhaseInitiale"] = bean.getColumnMedicamentsPhaseInitiale();
+		row["columnDateEffectivePhaseInitiale"] = bean.getColumnDateEffectivePhaseInitiale();
+		row["columnDateFinMedicamentsPhaseInitiale"] = bean.getColumnDateFinMedicamentsPhaseInitiale();
+		row["columnQuantiteMedicamentPhaseInitiale"] = bean.getColumnQuantiteMedicamentPhaseInitiale();
+		row["columnRegimePhaseContinuation"] = bean.getColumnRegimePhaseContinuation();
+		
+		
+		row["columnMedicamentsPhaseContinuation"] = bean.getColumnMedicamentsPhaseContinuation();
+		row["columnDateEffectivePhaseContinuation"] = bean.getColumnDateEffectivePhaseContinuation();
+		row["columnDateFinMedicamentsPhaseContinuation"] = bean.getColumnDateFinMedicamentsPhaseContinuation();
+		row["columnQuantiteMedicamentPhaseContinuation"] = bean.getColumnQuantiteMedicamentPhaseContinuation();
+		row["columnObservations"] = bean.getColumnObservations();
+		
+		
+		row["columnDateRDV"] = bean.getColumnDateRDV();
+		row["columnHonoree"] = bean.getColumnHonoree();
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="RDVRepDataSet" id="1811">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnDateRDV</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnHonoree</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnDateRDV</property>
+                    <text-property name="displayName">columnDateRDV</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnHonoree</property>
+                    <text-property name="displayName">columnHonoree</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnDateRDV</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnHonoree</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormTraitementRDV("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+		
+		row["columnDateRDV"] = bean.getColumnDateRDV();
+		row["columnHonoree"] = bean.getColumnHonoree();
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+        <script-data-set name="MicroscopRepDataSet" id="1788">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnDateExamenCrachat</property>
+                    <property name="dataType">date</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnResultatExamenCrachat</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnRaisonExamenCrachat</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnDateExamenCrachat</property>
+                    <text-property name="displayName">columnDateExamenCrachat</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnResultatExamenCrachat</property>
+                    <text-property name="displayName">columnResultatExamenCrachat</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnRaisonExamenCrachat</property>
+                    <text-property name="displayName">columnRaisonExamenCrachat</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnDateExamenCrachat</property>
+                        <property name="dataType">date</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnResultatExamenCrachat</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnRaisonExamenCrachat</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportHandler");
+			
+			beans = reportServiceHandler.getPatientCardFormMiscroscopie("modified", false, params["patient"], params["trimestre"], params["annee"], 
+			params["region"], params["district"], params["cdt"], params["personnel"], params["laboratoire"], params["dateDebut"], params["dateFin"]);	
+
+
+]]></method>
+            <property name="dataSource">ReportHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+	
+		var bean = beans.get(count);
+		
+
+		row["columnDateExamenCrachat"] = bean.getColumnDateExamenCrachat();		
+		
+		if (bean.getColumnRaisonExamenCrachat() != null)	
+			row["columnRaisonExamenCrachat"] = beanRenderer.getExamenMicroscopieEnumDisplayValue("raisonDepistage", bean.getColumnRaisonExamenCrachat());
+		if (bean.getColumnResultatExamenCrachat() != null)	
+			row["columnResultatExamenCrachat"] = beanRenderer.getExamenMicroscopieEnumDisplayValue("resultat", bean.getColumnResultatExamenCrachat());
+		
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+    </data-sets>
+    <styles>
+        <style name="report" id="33">
+            <property name="fontFamily">sans-serif</property>
+            <property name="fontSize">10pt</property>
+        </style>
+        <style name="crosstab-cell" id="37">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="crosstab" id="38">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="cardStyle" id="1490">
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">thin</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">thin</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">thin</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">thin</property>
+        </style>
+    </styles>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <property name="type">custom</property>
+            <property name="orientation">portrait</property>
+            <property name="topMargin">0.25in</property>
+            <property name="rightMargin">0.25in</property>
+            <property name="height">297mm</property>
+            <property name="width">300mm</property>
+            <method name="onPageStart"><![CDATA[// reportContext.getDesignHandle().getMasterPages().get(0).setProperty("orientation","portrait");]]></method>
+            <property name="headerHeight">1.9in</property>
+            <property name="footerHeight">0.95in</property>
+            <page-header>
+                <grid id="986">
+                    <property name="height">1.5104166666666667in</property>
+                    <property name="width">11.114583333333334in</property>
+                    <column id="987">
+                        <property name="width">11.114583333333334in</property>
+                    </column>
+                    <row id="988">
+                        <property name="height">0.65625in</property>
+                        <cell id="989">
+                            <grid name="EntetePage1" id="70">
+                                <property name="backgroundColor">#E5E5E5</property>
+                                <property name="height">0.5104166666666666in</property>
+                                <property name="width">11.020833333333334in</property>
+                                <column id="990">
+                                    <property name="width">1.8958333333333333in</property>
+                                </column>
+                                <column id="7">
+                                    <property name="width">9.125in</property>
+                                </column>
+                                <row id="12">
+                                    <property name="height">0.5104166666666666in</property>
+                                    <cell id="13">
+                                        <image name="NewImage" id="26">
+                                            <property name="height">32px</property>
+                                            <property name="width">130px</property>
+                                            <property name="source">file</property>
+                                            <expression name="uri" type="constant">ressources/images/pnlt.png</expression>
+                                        </image>
+                                    </cell>
+                                    <cell id="14">
+                                        <property name="fontSize">larger</property>
+                                        <property name="textAlign">center</property>
+                                        <label id="86">
+                                            <property name="fontSize">xx-large</property>
+                                            <property name="fontWeight">bold</property>
+                                            <property name="textAlign">center</property>
+                                            <text-property name="text" key="LIB_REP_TITLE">Carte du patient</text-property>
+                                        </label>
+                                    </cell>
+                                </row>
+                            </grid>
+                        </cell>
+                    </row>
+                    <row id="994">
+                        <property name="height">0.8541666666666666in</property>
+                        <cell id="991">
+                            <grid id="1136">
+                                <property name="width">8.447916666666666in</property>
+                                <column id="1137">
+                                    <property name="width">0.9166666666666666in</property>
+                                </column>
+                                <column id="1138">
+                                    <property name="width">1.9895833333333333in</property>
+                                </column>
+                                <column id="1139">
+                                    <property name="width">0.7708333333333334in</property>
+                                </column>
+                                <column id="1140">
+                                    <property name="width">1.65625in</property>
+                                </column>
+                                <column id="1141">
+                                    <property name="width">0.4895833333333333in</property>
+                                </column>
+                                <column id="1142">
+                                    <property name="width">2.625in</property>
+                                </column>
+                                <row id="1143">
+                                    <cell id="1144">
+                                        <label id="1164">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="REGION">Region</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1145">
+                                        <data id="2100">
+                                            <property name="dataSet">RepDataSetParameters</property>
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">columnRegion</property>
+                                                    <text-property name="displayName">columnRegion</text-property>
+                                                    <expression name="expression" type="javascript">dataSetRow["columnRegion"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">columnRegion</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="1146">
+                                        <label id="1166">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="DISTRICT">District</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1147">
+                                        <data id="2101">
+                                            <property name="dataSet">RepDataSetParameters</property>
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">columnDistrict</property>
+                                                    <text-property name="displayName">columnDistrict</text-property>
+                                                    <expression name="expression" type="javascript">dataSetRow["columnDistrict"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">columnDistrict</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="1168">
+                                        <label id="1169">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="CDT">CDT</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1149">
+                                        <data id="2102">
+                                            <property name="dataSet">RepDataSetParameters</property>
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">columnCDT</property>
+                                                    <text-property name="displayName">columnCDT</text-property>
+                                                    <expression name="expression" type="javascript">dataSetRow["columnCDT"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">columnCDT</property>
+                                        </data>
+                                    </cell>
+                                </row>
+                                <row id="1150">
+                                    <cell id="1151">
+                                        <label id="1171">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="TRIMESTER">Trimestre</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1152">
+                                        <data id="1174">
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">trimestre</property>
+                                                    <expression name="expression" type="javascript">params["trimestre"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">trimestre</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="1153">
+                                        <label id="1175">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="ANNEE">Annee</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1154">
+                                        <data id="1176">
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">annee</property>
+                                                    <expression name="expression" type="javascript">params["annee"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">annee</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="1155"/>
+                                    <cell id="1156"/>
+                                </row>
+                                <row id="1157">
+                                    <cell id="1158">
+                                        <label id="1172">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="DATE_DEBUT">DateDebut</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1159">
+                                        <data id="1177">
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">dateDebut</property>
+                                                    <expression name="expression" type="javascript">params["dateDebut"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">dateDebut</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="1160">
+                                        <label id="1173">
+                                            <property name="fontWeight">bold</property>
+                                            <text-property name="text" key="DATE_FIN">DateFin</text-property>
+                                        </label>
+                                    </cell>
+                                    <cell id="1161">
+                                        <data id="1178">
+                                            <list-property name="boundDataColumns">
+                                                <structure>
+                                                    <property name="name">dateFin</property>
+                                                    <expression name="expression" type="javascript">params["dateFin"]</expression>
+                                                    <property name="dataType">string</property>
+                                                </structure>
+                                            </list-property>
+                                            <property name="resultSetColumn">dateFin</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="1162"/>
+                                    <cell id="1163"/>
+                                </row>
+                            </grid>
+                        </cell>
+                    </row>
+                </grid>
+            </page-header>
+            <page-footer>
+                <grid id="958">
+                    <column id="959"/>
+                    <row id="1113">
+                        <cell id="1114">
+                            <property name="fontWeight">bold</property>
+                            <property name="textAlign">right</property>
+                            <text id="3">
+                                <property name="contentType">html</property>
+                                <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                            </text>
+                        </cell>
+                    </row>
+                    <row id="960">
+                        <cell id="961">
+                            <label name="NewLabel311" id="962">
+                                <property name="fontWeight">bold</property>
+                                <property name="textAlign">center</property>
+                                <text-property name="text" key="LIB_FOOTERINFO">Données et statistiques officielles compilées par le PNLT</text-property>
+                            </label>
+                        </cell>
+                    </row>
+                    <row id="963">
+                        <cell id="964">
+                            <label name="NewLabel321" id="965">
+                                <property name="fontWeight">bold</property>
+                                <property name="textAlign">center</property>
+                                <text-property name="text">B.P. 15656 - Email: contact@pnlt.cm - Tel +237 22200390 - Site Web: http://www.pnlt.cm </text-property>
+                            </label>
+                        </cell>
+                    </row>
+                </grid>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <grid id="1890">
+            <property name="height">3.1145833333333335in</property>
+            <property name="width">11.21875in</property>
+            <column id="1891">
+                <property name="width">7.552083333333333in</property>
+            </column>
+            <column id="1892">
+                <property name="width">3.6666666666666665in</property>
+            </column>
+            <row id="1893">
+                <property name="height">0.7916666666666666in</property>
+                <cell id="1894">
+                    <table id="1712">
+                        <property name="style">cardStyle</property>
+                        <property name="marginBottom">5cm</property>
+                        <property name="dataSet">RepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnNumRegTB</property>
+                                <text-property name="displayName">columnNumRegTB</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnNumRegTB"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnNom</property>
+                                <text-property name="displayName">columnNom</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnNom"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnSexe</property>
+                                <text-property name="displayName">columnSexe</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnSexe"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnAge</property>
+                                <text-property name="displayName">columnAge</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnAge"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnAdresse</property>
+                                <text-property name="displayName">columnAdresse</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnAdresse"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnDateDebutTrait</property>
+                                <text-property name="displayName">columnDateDebutTrait</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnDateDebutTrait"]</expression>
+                                <property name="dataType">date</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnNomCDT</property>
+                                <text-property name="displayName">columnNomCDT</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnNomCDT"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <structure name="toc"/>
+                        <column id="1743">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1744">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1745">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1746">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1747">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1748">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1749">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <header>
+                            <row id="1713">
+                                <property name="style">cardStyle</property>
+                                <property name="fontSize">11pt</property>
+                                <property name="fontWeight">bold</property>
+                                <cell id="1714">
+                                    <label id="1715">
+                                        <text-property name="text" key="NUM_REG">columnNumRegTB</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1716">
+                                    <label id="1717">
+                                        <text-property name="text" key="NAME_SURNAME">columnNom</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1718">
+                                    <label id="1719">
+                                        <text-property name="text" key="SEX">columnSexe</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1720">
+                                    <label id="1721">
+                                        <text-property name="text" key="AGE">columnAge</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1722">
+                                    <label id="1723">
+                                        <text-property name="text" key="ADRESS">columnAdresse</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1724">
+                                    <label id="1725">
+                                        <text-property name="text" key="DATE_BEGIN_TREAT">columnDateDebutTrait</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1726">
+                                    <label id="1727">
+                                        <text-property name="text" key="CDT_SAVE">columnNomCDT</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="1728">
+                                <property name="style">cardStyle</property>
+                                <cell id="1729">
+                                    <data id="1730">
+                                        <property name="resultSetColumn">columnNumRegTB</property>
+                                    </data>
+                                </cell>
+                                <cell id="1731">
+                                    <data id="1732">
+                                        <property name="resultSetColumn">columnNom</property>
+                                    </data>
+                                </cell>
+                                <cell id="1733">
+                                    <data id="1734">
+                                        <property name="resultSetColumn">columnSexe</property>
+                                    </data>
+                                </cell>
+                                <cell id="1735">
+                                    <data id="1736">
+                                        <property name="resultSetColumn">columnAge</property>
+                                    </data>
+                                </cell>
+                                <cell id="1737">
+                                    <data id="1738">
+                                        <property name="resultSetColumn">columnAdresse</property>
+                                    </data>
+                                </cell>
+                                <cell id="1739">
+                                    <data id="1740">
+                                        <property name="resultSetColumn">columnDateDebutTrait</property>
+                                    </data>
+                                </cell>
+                                <cell id="1741">
+                                    <data id="1742">
+                                        <property name="resultSetColumn">columnNomCDT</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+                <cell id="1895">
+                    <table id="1751">
+                        <property name="marginTop">0pt</property>
+                        <property name="width">3.5625in</property>
+                        <property name="dataSet">RepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnFormeMaladie</property>
+                                <text-property name="displayName">columnFormeMaladie</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnFormeMaladie"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnTypePatient</property>
+                                <text-property name="displayName">columnTypePatient</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnTypePatient"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="1762">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.875in</property>
+                        </column>
+                        <column id="1763">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.6875in</property>
+                        </column>
+                        <header>
+                            <row id="1752">
+                                <property name="style">cardStyle</property>
+                                <property name="fontSize">11pt</property>
+                                <property name="fontWeight">bold</property>
+                                <property name="height">0.28125in</property>
+                                <cell id="1753">
+                                    <label id="1754">
+                                        <text-property name="text" key="FORM">columnFormeMaladie</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1755">
+                                    <label id="1756">
+                                        <text-property name="text" key="TYPE">columnTypePatient</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="1757">
+                                <property name="style">cardStyle</property>
+                                <property name="height">0.2916666666666667in</property>
+                                <cell id="1758">
+                                    <data id="1759">
+                                        <property name="resultSetColumn">columnFormeMaladie</property>
+                                    </data>
+                                </cell>
+                                <cell id="1760">
+                                    <data id="1761">
+                                        <property name="resultSetColumn">columnTypePatient</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+            </row>
+            <row id="1896">
+                <cell id="1897">
+                    <table id="1789">
+                        <property name="width">5.552083333333333in</property>
+                        <property name="dataSet">MicroscopRepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnDateExamenCrachat</property>
+                                <text-property name="displayName">columnDateExamenCrachat</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnDateExamenCrachat"]</expression>
+                                <property name="dataType">date</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnResultatExamenCrachat</property>
+                                <text-property name="displayName">columnResultatExamenCrachat</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnResultatExamenCrachat"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnRaisonExamenCrachat</property>
+                                <text-property name="displayName">columnRaisonExamenCrachat</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnRaisonExamenCrachat"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="1808">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.8125in</property>
+                        </column>
+                        <column id="1809">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.9479166666666667in</property>
+                        </column>
+                        <column id="1810">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.7916666666666667in</property>
+                        </column>
+                        <header>
+                            <row id="1790">
+                                <property name="fontWeight">bold</property>
+                                <property name="height">0.2708333333333333in</property>
+                                <cell id="1791">
+                                    <label id="1792">
+                                        <text-property name="text" key="DATE_EXAM">columnDateExamenCrachat</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1793">
+                                    <label id="1794">
+                                        <text-property name="text" key="RESULTAT_EXAM">columnResultatExamenCrachat</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1795">
+                                    <label id="1796">
+                                        <text-property name="text" key="RAISON_EXAM">columnRaisonExamenCrachat</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="1797">
+                                <property name="height">0.2604166666666667in</property>
+                                <cell id="1798">
+                                    <data id="1799">
+                                        <property name="resultSetColumn">columnDateExamenCrachat</property>
+                                    </data>
+                                </cell>
+                                <cell id="1800">
+                                    <data id="1801">
+                                        <property name="resultSetColumn">columnResultatExamenCrachat</property>
+                                    </data>
+                                </cell>
+                                <cell id="1802">
+                                    <data id="1803">
+                                        <property name="resultSetColumn">columnRaisonExamenCrachat</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+                <cell id="1898">
+                    <table id="1772">
+                        <property name="width">3.59375in</property>
+                        <property name="dataSet">BiologiqueDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnDataPoidPatient</property>
+                                <text-property name="displayName">columnDataPoidPatient</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnDataPoidPatient"]</expression>
+                                <property name="dataType">string</property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnPoidsPatient</property>
+                                <text-property name="displayName">columnPoidsPatient</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnPoidsPatient"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="1786">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.90625in</property>
+                        </column>
+                        <column id="1787">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.6875in</property>
+                        </column>
+                        <header>
+                            <row id="1773">
+                                <property name="fontWeight">bold</property>
+                                <property name="height">0.2708333333333333in</property>
+                                <cell id="1774">
+                                    <label id="1775">
+                                        <text-property name="text" key="DATE_EXAM">columnDataPoidPatient</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1776">
+                                    <label id="1777">
+                                        <text-property name="text" key="WEIGHT">columnPoidsPatient</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="1778">
+                                <property name="height">0.28125in</property>
+                                <cell id="1779">
+                                    <data id="1780">
+                                        <property name="resultSetColumn">columnDataPoidPatient</property>
+                                    </data>
+                                </cell>
+                                <cell id="1781">
+                                    <data id="1782">
+                                        <property name="resultSetColumn">columnPoidsPatient</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+            </row>
+            <row id="1899">
+                <property name="height">0.7291666666666666in</property>
+                <cell id="1900">
+                    <table id="2056">
+                        <property name="style">cardStyle</property>
+                        <property name="width">5.583333333333333in</property>
+                        <property name="dataSet">TreatmentInitRepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnRegimePhaseInitiale</property>
+                                <text-property name="displayName">columnRegimePhaseInitiale</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnRegimePhaseInitiale"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnDateEffectivePhaseInitiale</property>
+                                <text-property name="displayName">columnDateEffectivePhaseInitiale</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnDateEffectivePhaseInitiale"]</expression>
+                                <property name="dataType">date</property>
+                            </structure>
+                        </list-property>
+                        <column id="2070">
+                            <property name="style">cardStyle</property>
+                            <property name="width">2.7916666666666665in</property>
+                        </column>
+                        <column id="2071">
+                            <property name="style">cardStyle</property>
+                            <property name="width">2.7916666666666665in</property>
+                        </column>
+                        <header>
+                            <row id="2057">
+                                <property name="fontSize">11pt</property>
+                                <property name="fontWeight">bold</property>
+                                <property name="height">0.3229166666666667in</property>
+                                <cell id="2058"/>
+                                <cell id="2060">
+                                    <label id="2061">
+                                        <text-property name="text" key="DATE_INIT_PHASE">columnDateEffectivePhaseInitiale</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="2062">
+                                <property name="height">0.3020833333333333in</property>
+                                <cell id="2063">
+                                    <data id="2064">
+                                        <property name="resultSetColumn">columnRegimePhaseInitiale</property>
+                                    </data>
+                                </cell>
+                                <cell id="2065">
+                                    <data id="2066">
+                                        <property name="resultSetColumn">columnDateEffectivePhaseInitiale</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+                <cell id="1901">
+                    <table id="2072">
+                        <property name="width">3.5729166666666665in</property>
+                        <property name="dataSet">TreatmentContRepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnRegimePhaseContinuation</property>
+                                <text-property name="displayName">columnRegimePhaseContinuation</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnRegimePhaseContinuation"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnDateEffectivePhaseContinuation</property>
+                                <text-property name="displayName">columnDateEffectivePhaseContinuation</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnDateEffectivePhaseContinuation"]</expression>
+                                <property name="dataType">date</property>
+                            </structure>
+                        </list-property>
+                        <column id="2086">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.78125in</property>
+                        </column>
+                        <column id="2087">
+                            <property name="style">cardStyle</property>
+                            <property name="width">1.7916666666666667in</property>
+                        </column>
+                        <header>
+                            <row id="2073">
+                                <property name="style">cardStyle</property>
+                                <property name="fontSize">11pt</property>
+                                <property name="fontWeight">bold</property>
+                                <property name="height">0.2604166666666667in</property>
+                                <cell id="2074">
+                                    <label id="2075">
+                                        <text-property name="text"></text-property>
+                                    </label>
+                                </cell>
+                                <cell id="2076">
+                                    <label id="2077">
+                                        <text-property name="text" key="DATE_CONT_PHASE">columnDateEffectivePhaseContinuation</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="2078">
+                                <property name="height">0.25in</property>
+                                <cell id="2079">
+                                    <data id="2080">
+                                        <property name="resultSetColumn">columnRegimePhaseContinuation</property>
+                                    </data>
+                                </cell>
+                                <cell id="2081">
+                                    <data id="2082">
+                                        <property name="resultSetColumn">columnDateEffectivePhaseContinuation</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+            </row>
+            <row id="1905">
+                <cell id="1906">
+                    <table id="1865">
+                        <property name="dataSet">RDVRepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnDateRDV</property>
+                                <text-property name="displayName">columnDateRDV</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnDateRDV"]</expression>
+                                <property name="dataType">date</property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">columnHonoree</property>
+                                <text-property name="displayName">columnHonoree</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnHonoree"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="1876">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <column id="1877">
+                            <property name="style">cardStyle</property>
+                        </column>
+                        <header>
+                            <row id="1866">
+                                <property name="fontWeight">bold</property>
+                                <cell id="1867">
+                                    <label id="1868">
+                                        <text-property name="text" key="RDV_DATE">columnDateRDV</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="1869">
+                                    <label id="1870">
+                                        <text-property name="text" key="RDV_HONORED">columnHonoree</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="1871">
+                                <cell id="1872">
+                                    <data id="1873">
+                                        <property name="resultSetColumn">columnDateRDV</property>
+                                    </data>
+                                </cell>
+                                <cell id="1874">
+                                    <data id="1875">
+                                        <property name="resultSetColumn">columnHonoree</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+                <cell id="1907">
+                    <table id="2089">
+                        <property name="dataSet">RepDataSet</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">columnObservations</property>
+                                <text-property name="displayName">columnObservations</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["columnObservations"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                        </list-property>
+                        <column id="2098"/>
+                        <header>
+                            <row id="2090">
+                                <cell id="2091">
+                                    <property name="style">cardStyle</property>
+                                    <label id="2092">
+                                        <property name="fontSize">11pt</property>
+                                        <property name="fontWeight">bold</property>
+                                        <text-property name="text" key="OBSERVATION">columnObservations</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <detail>
+                            <row id="2093">
+                                <cell id="2094">
+                                    <property name="style">cardStyle</property>
+                                    <data id="2095">
+                                        <property name="resultSetColumn">columnObservations</property>
+                                    </data>
+                                </cell>
+                            </row>
+                        </detail>
+                    </table>
+                </cell>
+            </row>
+        </grid>
+    </body>
+</report>

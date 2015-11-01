@@ -1,0 +1,84 @@
+«IMPORT core»
+«EXTENSION template::CommonEntityUtilExt» 
+
+
+«DEFINE generate(String packageName, String projectName) FOR CardEntity»
+«IF nestedFields!=null && !nestedFields.isEmpty-»
+«FILE projectName.toLowerCase()+ "/client/ui/editor/nested/" + this.name.toFirstUpper() + "EditorNestedRow.ui.xml"-»
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:imo='urn:import:org.imogene.web.client.ui.field'
+	xmlns:imo1='urn:import:org.imogene.web.client.ui.field.relation.single'
+	xmlns:imo2='urn:import:org.imogene.web.client.ui.field.relation.multi'
+	xmlns:imo3="urn:import:org.imogene.web.client.ui.field.group"
+	xmlns:imo4="urn:import:org.imogene.web.client.ui.field.binary"
+	«IF hasNestedFormWithNestedFields(nestedFields)-»
+	xmlns:imon1="urn:import:org.imogene.«projectName.toLowerCase()».client.ui.editor.nested"
+	«ENDIF -»
+	«IF hasNestedFormWithoutNestedFields(nestedFields)-»
+	xmlns:imon2="urn:import:org.imogene.«projectName.toLowerCase()».client.ui.editor"
+	«ENDIF -»		
+	«IF isTranslatableFieldPresent(nestedFields)-»
+	xmlns:imo5="urn:import:org.imogene.«projectName.toLowerCase()».client.ui.field">
+	«ENDIF -»
+	«IF isMultiRelationFieldPresent(groups.fields)-»
+	xmlns:imo6="urn:import:org.imogene.«projectName.toLowerCase()».client.ui.editor.nested"
+	«ENDIF-»
+	>
+
+	<ui:style>
+	
+		«IF this.name.matches("EntreeLot") || this.name.matches("SortieLot")-»
+		.imogene-form {
+			width: 100%;
+			vertical-align: top;
+			/*border-top: 1px solid #777;*/
+			/*padding-top: 2px;*/
+			/*margin-bottom: 2px;	*/
+		}
+		«ELSE -»		
+		.imogene-form {
+			width: 100%;
+			vertical-align: top;
+			border-top: 1px solid #777;
+			padding-top: 2px;
+			margin-bottom: 2px;	
+		}		
+		«ENDIF -»	
+
+		.imog-clearImage {
+			cursor: pointer;
+			cursor: hand;
+			text-align: left;
+			margin-left: 3px;
+		}	
+	</ui:style>
+
+
+	<g:HorizontalPanel stylePrimaryName="{style.imogene-form}" verticalAlignment="middle">
+	
+		«FOREACH nestedFields AS f -»
+				«IF this.name.matches("PriseMedicamentRegime") && f.name.matches("PriseSimultanee")-»
+		<g:cell verticalAlignment="middle" width="100px" horizontalAlignment="center">				
+				«ELSE -»		
+		<g:cell verticalAlignment="middle">
+				«ENDIF -»
+			<«EXPAND template::web::WebFieldUtil::formFieldTypeDecXml FOR f»:«EXPAND template::web::WebFieldUtil::formFieldTypeXml FOR f» ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»" />
+		</g:cell>
+		«ENDFOREACH -»	
+	
+		«IF this.name.matches("EntreeLot") || this.name.matches("SortieLot")-»
+		<g:cell verticalAlignment="middle" width="0px" horizontalAlignment="left">
+		«ELSE -»
+		<g:cell verticalAlignment="middle" width="24px" horizontalAlignment="left">
+		«ENDIF -»
+			<g:Image ui:field="clearImage" stylePrimaryName="{style.imog-clearImage}" />
+		</g:cell>
+	
+	</g:HorizontalPanel>
+	
+
+</ui:UiBinder>
+«ENDFILE»
+«ENDIF -»
+«ENDDEFINE»

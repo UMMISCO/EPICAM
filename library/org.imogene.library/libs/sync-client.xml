@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><library desc="Imogene synchronizer client library" id="org.imogene.library.sync.client" name="Imogene synchronizer client library"><jar file="commons-httpclient-3.1.jar"/><jar file="commons-logging-1.0.4.jar"/><jar file="commons-codec-1.2.jar"/></library>

@@ -1,0 +1,215 @@
+«IMPORT core»
+«EXTENSION template::CommonEntityUtilExt» 
+
+«DEFINE generate(String packageName, String projectName) FOR CardEntity»
+
+	«EXPAND createListEditor(packageName, projectName) FOREACH groups.fields»
+
+«ENDDEFINE»
+
+
+«DEFINE createListEditor(String packageName, String projectName) FOR FieldEntity»«ENDDEFINE»
+«DEFINE createListEditor(String packageName, String projectName) FOR RelationFieldEntity»
+«IF nestedForm && entity.nestedFields!=null && !entity.nestedFields.isEmpty && cardinality==-1 || cardinality>1-»
+«FILE projectName.toLowerCase()+ "/client/ui/editor/nested/" + parentGroup.parentCard.name.toFirstUpper() + name.toFirstUpper() + "ListEditor.ui.xml"-»
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:imo3="urn:import:org.imogene.web.client.ui.field.group">
+
+	<ui:style>
+		.imog-AddImage {
+			cursor: pointer;
+			cursor: hand;
+			margin-left: 2px;
+		}
+
+		.fieldGroup-ListEditor {
+			margin-top: 5px;
+		}
+		
+		«IF parentGroup.parentCard.name.toFirstUpper().matches("Patient") && (name.toFirstUpper().matches("Serologies") || name.toFirstUpper().matches("ExamensBiologiques"))-»
+		.header {
+			width: 217px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+				
+		.header1 {
+			width: 100px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+		«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Commande") && (name.toFirstUpper().matches("Medicaments") || name.toFirstUpper().matches("Intrants"))-»
+		.header {
+			width: 257px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.header2 {
+			width: 117px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}	
+		«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Ravitaillement") && name.toFirstUpper().matches("Details")-»
+		.header {
+			width: 232px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}	
+		
+		.header1 {
+			width: 312px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}		
+
+		.header2 {
+			width: 117px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+		«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Reception") && (name.toFirstUpper().matches("Intrants") || name.toFirstUpper().matches("Medicaments"))-»
+		.header {
+			width: 242px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}	
+
+		.header1 {
+			width: 302px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.header2 {
+			width: 117px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}	
+		«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Inventaire") && name.toFirstUpper().matches("Details") -»
+		.header {
+			width: 217px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}	
+
+		.header2 {
+			width: 302px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+		«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Regime") && name.toFirstUpper().matches("PrisesMedicamenteuses")-»
+		.header1 {
+			width: 182px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.header2 {
+			width: 82px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}	
+
+		.header {
+			width: 116px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}				
+		«ELSE -»
+		.header {
+			width: 217px;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}		
+		«ENDIF -»		
+		
+		@external .fieldGroup-ListEditor;
+	</ui:style>
+
+	<imo3:FieldGroupPanel ui:field="listSection" >
+	    <g:HorizontalPanel>
+			<g:VerticalPanel>
+	
+				<g:HorizontalPanel  verticalAlignment="middle" >
+				
+					«FOREACH entity.nestedFields AS f -»
+						«IF parentGroup.parentCard.name.toFirstUpper().matches("Reception") && (name.toFirstUpper().matches("Intrants") || name.toFirstUpper().matches("Medicaments")) && f.name.matches("Commande") -»	
+						«ELSE -»										
+					<g:cell verticalAlignment="middle" horizontalAlignment="center">
+						«IF parentGroup.parentCard.name.toFirstUpper().matches("Patient") && name.toFirstUpper().matches("Serologies")-»
+							«IF f.name.matches("DateTest")-»
+								 <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header1}"/>
+							«ELSEIF f.name.matches("ResultatVIH")-»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" width="0px"/>
+							«ELSE -»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header}"/>
+							«ENDIF -»
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Patient") && name.toFirstUpper().matches("ExamensBiologiques")-»
+							«IF f.name.matches("DateTest")-»
+								 <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header1}"/>
+							«ELSE -»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header}"/>
+							«ENDIF -»							
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Commande") && name.toFirstUpper().matches("Medicaments")-»
+							«IF f.name.matches("Medicament")-»
+								 <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header}"/>
+							«ELSE -»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header2}"/>
+							«ENDIF -»							
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Commande") && name.toFirstUpper().matches("Intrants")-»
+							«IF f.name.matches("Intrant")-»
+								 <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header}"/>
+							«ELSE -»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header2}"/>
+							«ENDIF -»	
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Inventaire") && name.toFirstUpper().matches("Details") -»
+							«IF f.name.matches("Lot")-»
+								 <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header2}"/>
+							«ELSEIF f.name.matches("CDT")-»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" width="0px"/>
+							«ELSE-»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header}"/>
+							«ENDIF -»	
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Reception") && (name.toFirstUpper().matches("Intrants") || name.toFirstUpper().matches("Medicaments")) && f.name.matches("EntreeLot") -»												
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header1}"/>
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Ravitaillement") && name.toFirstUpper().matches("Details") && f.name.matches("EntreeLot")-»
+								<g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header1}"/>
+						«ELSE -»
+					    <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»Label" stylePrimaryName="{style.header}"/>
+					    «ENDIF -»					    
+					</g:cell>
+						«IF parentGroup.parentCard.name.toFirstUpper().matches("Ravitaillement") && name.toFirstUpper().matches("Details") && (f.name.matches("SortieLot") || f.name.matches("EntreeLot"))-»
+						<g:cell verticalAlignment="middle" horizontalAlignment="center">
+						    <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»QuantiteLabel" stylePrimaryName="{style.header2}"/>
+						</g:cell>	
+						«ELSEIF parentGroup.parentCard.name.toFirstUpper().matches("Reception") && (name.toFirstUpper().matches("Intrants") || name.toFirstUpper().matches("Medicaments")) && f.name.matches("EntreeLot")-»
+						<g:cell verticalAlignment="middle" horizontalAlignment="center">
+						    <g:Label ui:field="«EXPAND template::CommonFieldUtil::propertyName FOR f»QuantiteLabel" stylePrimaryName="{style.header2}"/>
+						</g:cell>													
+						«ENDIF -»		
+						«ENDIF -»				
+					«ENDFOREACH -»	
+									
+					<g:cell verticalAlignment="middle" horizontalAlignment="right">
+					    <g:Image ui:field="addItem" stylePrimaryName="{style.imog-AddImage}" width="24px" />		
+					</g:cell>
+				</g:HorizontalPanel>	    
+			    
+				<g:VerticalPanel ui:field="listContainer" />
+				
+			</g:VerticalPanel>
+			
+		</g:HorizontalPanel>
+	</imo3:FieldGroupPanel>
+
+</ui:UiBinder> 
+
+
+
+
+«ENDFILE»
+«ENDIF-»
+«ENDDEFINE»

@@ -1,0 +1,47 @@
+«IMPORT core»
+«DEFINE generate(boolean multilogin, String sntpServer) FOR Project »
+«FILE 'xml/hidden_settings.xml'-»
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/imog__sync_category">
+		<fr.medes.android.preference.BaseDialogPreference
+			android:key="syncTerminal"
+			android:title="@string/imog__sync_terminal_title"
+			android:dialogTitle="@string/imog__sync_terminal_dialog_title"
+			android:dialogMessage="@string/imog__sync_terminal_dialog_message" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/imog__debug_category">
+		<CheckBoxPreference
+			android:key="debugEnabled"
+			android:title="@string/imog__debug_enabled_title"
+			android:summaryOn="@string/imog__debug_enabled_summaryon"
+			android:summaryOff="@string/imog__debug_enabled_summaryoff" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/imog__delete_category">
+		<fr.medes.android.preference.BaseDialogPreference
+			android:key="deleteHistory"
+			android:title="@string/imog__delete_sync_history_title"
+			android:summary="@string/imog__delete_sync_history_summary"
+			android:dialogTitle="@string/imog__delete_sync_history_title"
+			android:dialogMessage="@string/imog__delete_sync_history_dialog_message" />
+		<fr.medes.android.preference.BaseDialogPreference
+			android:key="deleteDatabase"
+			android:title="@string/imog__delete_database_title"
+			android:summary="@string/imog__delete_database_summary"
+			android:dialogTitle="@string/imog__delete_database_title"
+			android:dialogMessage="@string/imog__delete_database_dialog_message" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/imog__ntp_category">
+		<fr.medes.android.preference.MyEditTextPreference
+			android:key="ntpHost"
+			android:title="@string/imog__ntp_host_title"
+			android:defaultValue="«sntpServer»" />
+		<Preference
+			android:key="ntpOffset"
+			android:title="@string/imog__ntp_offset_title" />
+	</PreferenceCategory>
+</PreferenceScreen>
+«ENDFILE-»
+«ENDDEFINE»
+
+

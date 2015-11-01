@@ -1,0 +1,142 @@
+«IMPORT core»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+«DEFINE generate(boolean multilogin) FOR Project »
+«FILE 'xml/general_settings.xml'-»
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android" >
+	<PreferenceCategory 
+		android:title="@string/imog__sync_category">
+		«IF multilogin»
+		<fr.medes.android.preference.EncryptedPreference
+			android:key="syncLogin"
+			android:title="@string/imog__sync_login_title" />
+		«ENDIF»
+		<fr.medes.android.preference.MyEditTextPreference
+			android:key="syncServer"
+			android:title="@string/imog__sync_server_title"
+			android:inputType="textUri" />
+		<fr.medes.android.preference.MyEditTextPreference 
+			android:key="syncTerminal"
+			android:title="@string/imog__sync_terminal_title"
+			android:shouldDisableView="false"
+			android:enabled="false" />
+		«IF hasFilter(this)-»
+		<PreferenceScreen
+			android:key="screenFilters"
+			android:title="@string/imog__filters_screen"
+			android:summary="@string/imog__filters_screen_summary">
+			
+			<intent
+                android:targetPackage="org.imogene.android.«name.toLowerCase()»"
+                android:targetClass="org.imogene.android.«name.toLowerCase()».app.FilterPreferenceScreen" />
+        </PreferenceScreen>
+		«ENDIF-»
+		<Preference
+			android:key="syncCheck"
+			android:title="@string/imog__sync_check_title"
+			android:summary="@string/imog__sync_check_summary" />
+		<CheckBoxPreference 
+			android:key="syncEnabled"
+			android:title="@string/imog__sync_enabled_title"
+			android:summaryOn="@string/imog__sync_enabled_summaryon"
+			android:summaryOff="@string/imog__sync_enabled_summaryoff" />
+		<ListPreference
+			android:key="syncPeriod"
+			android:title="@string/imog__sync_period_title"
+			android:summary="@string/imog__sync_period_summary"
+			android:defaultValue="15" 
+			android:entries="@array/imog__entries_period_preference"
+			android:entryValues="@array/imog__entryvalues_period_preference" />
+		<CheckBoxPreference
+			android:key="syncBidirectionalEnabled"
+			android:title="@string/imog__sync_bidirectional_enabled_title"
+			android:summaryOn="@string/imog__sync_bidirectional_enabled_summaryon"
+			android:summaryOff="@string/imog__sync_bidirectional_enabled_summaryoff"
+			android:defaultValue="true" />
+		<CheckBoxPreference
+			android:key="syncOnSaveEnabled"
+			android:title="@string/imog__sync_onsave_enabled_title"
+			android:summaryOn="@string/imog__sync_onsave_enabled_summaryon"
+			android:summaryOff="@string/imog__sync_onsave_enabled_summaryoff"
+			android:defaultValue="true" />
+	</PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/imog__push_category">
+		<CheckBoxPreference 
+			android:key="pushEnabled"
+			android:title="@string/imog__push_enabled_title"
+			android:summaryOn="@string/imog__push_enabled_summaryon"
+			android:summaryOff="@string/imog__push_enabled_summaryoff" />
+		<fr.medes.android.preference.MyEditTextPreference 
+			android:key="pushHost"
+			android:title="@string/imog__push_host_title"
+			android:inputType="textUri" />
+		<fr.medes.android.preference.MyEditTextPreference 
+			android:key="pushPort"
+			android:title="@string/imog__push_port_title"
+			android:inputType="number" />
+		<CheckBoxPreference
+			android:key="pushSslEnabled"
+			android:title="@string/imog__push_ssl_enabled_title"
+			android:summaryOn="@string/imog__push_ssl_enabled_summaryon"
+			android:summaryOff="@string/imog__push_ssl_enabled_summaryoff"
+			android:defaultValue="false" />
+	</PreferenceCategory>
+	<PreferenceCategory 
+		android:title="@string/imog__update_category">
+		<fr.medes.android.preference.MyEditTextPreference
+			android:key="updateServer"
+			android:title="@string/imog__update_server_title"
+			android:inputType="textUri" />
+		<Preference
+			android:key="updateAvailable"
+			android:title="@string/imog__update_available_title"
+			android:summary="@string/imog__update_available_summary_disabled"
+			android:enabled="false" >
+        </Preference>
+	</PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/imog__application_category">
+		<fr.medes.android.preference.EncryptedPreference
+			android:key="«IF multilogin»currentLogin«ELSE»syncLogin«ENDIF»"
+			android:title="@string/imog__application_current_login_title" />
+		<CheckBoxPreference
+			android:key="wizardEnabled"
+			android:title="@string/imog__application_wizard_enabled_title"
+			android:summaryOn="@string/imog__application_wizard_enabled_summaryon"
+			android:summaryOff="@string/imog__application_wizard_enabled_summaryoff" />
+	</PreferenceCategory>
+	<PreferenceCategory
+	    android:title="@string/imog__precache_category" >
+    	<Preference
+    		android:key="mapAutomaticCache"
+        	android:title="@string/imog__precache_caching_title"
+        	android:summary="@string/imog__precache_caching_summary" />
+    	<Preference
+    		android:key="mapClearCache"
+        	android:title="@string/imog__precache_clear_title"
+        	android:summary="@string/imog__precache_computing_summary" />
+    	<Preference
+    		android:key="mapPrecacheArea"
+        	android:title="@string/imog__precache_area_title"
+        	android:summary="@string/imog__precache_computing_summary" >
+        	
+        	<intent
+            	android:targetClass="fr.medes.android.maps.app.PreCacheList"
+            	android:targetPackage="org.imogene.android.«name.toLowerCase()»" />
+    	</Preference>
+    </PreferenceCategory>
+	<PreferenceCategory
+		android:title="@string/imog__about_category">
+		<fr.medes.android.preference.BaseDialogPreference
+			android:key="about"
+			android:title="@string/imog__about_title"
+			android:summary="@string/imog__about_summary"
+			android:dialogTitle="@string/imog__about_title"
+			android:negativeButtonText="@null"
+			android:dialogLayout="@layout/imog__about_preference" />
+	</PreferenceCategory>
+</PreferenceScreen>
+«ENDFILE»
+«ENDDEFINE»

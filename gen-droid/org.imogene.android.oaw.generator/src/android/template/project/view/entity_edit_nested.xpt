@@ -1,0 +1,134 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+«DEFINE generate(String projectName) FOR CardEntity»
+«IF isNested((Project) eContainer, this)»
+«FILE "/widget/field/edit/" + name.toFirstUpper() + "NestedEdit.java"»
+package org.imogene.android.widget.field.edit;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.net.Uri;
+import android.os.Parcelable;
+import android.util.AttributeSet;
+
+import fr.medes.android.util.content.ContentUrisUtils;
+
+import org.imogene.android.widget.ErrorAdapter.ErrorEntry;
+import org.imogene.android.widget.field.FieldManager;
+import org.imogene.android.widget.field.BaseField;
+import org.imogene.android.widget.field.BaseField.OnValueChangeListener;
+import org.imogene.android.widget.field.edit.RelationFieldEdit.RelationManager;
+import org.imogene.android.widget.field.edit.*;
+import org.imogene.android.«projectName.toLowerCase()».R;
+import org.imogene.android.«projectName.toLowerCase()».domain.*;
+import org.imogene.android.«projectName.toLowerCase()».security.AccessPolicy;
+
+public class «name.toFirstUpper()»NestedEdit extends RelationOneFieldEdit<«name.toFirstUpper()»> implements OnValueChangeListener, RelationManager<«name.toFirstUpper()»> {
+«LET getNestedFields() AS fields-»
+
+	«FOREACH fields AS f-»
+	private «EXPAND android::template::EditorUtils::classInClass FOR f» «f.name.toFirstLower()»;
+	«ENDFOREACH»
+	
+	private AccessPolicy mPolicy;
+	
+	public «name.toFirstUpper()»NestedEdit(Context context, AttributeSet attrs) {
+		super(context, attrs, R.layout.«name.toLowerCase()»_edit_nested);
+
+		«FOREACH fields AS f-»
+		«f.name.toFirstLower()» = («EXPAND android::template::EditorUtils::classInClass FOR f») findViewById(R.id.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR f»);
+		«ENDFOREACH-»
+	
+		«FOREACH fields AS f-»
+		«EXPAND android::template::EditorUtils::specificInit FOR f-»
+		«EXPAND android::template::EditorUtils::dependency FOREACH f.fieldDependentVisibility-»
+		«f.name.toFirstLower()».setOnValueChangedListener(this);
+		«ENDFOREACH»
+		
+		setOnClickListener(null);
+		setOnLongClickListener(null);
+		setRequired(false);
+		«REM»
+		«FOREACH groups AS group»
+		if (mPolicy.canRead«name.toFirstUpper()»«group.name.toFirstUpper()»() ||
+			mPolicy.canEdit«name.toFirstUpper()»«group.name.toFirstUpper()»()) {
+			adapter.addPage(R.string.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR group», R.id.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR group»);
+
+			if (!mPolicy.canEdit«name.toFirstUpper()»«group.name.toFirstUpper()»()) {
+				«FOREACH group.fields AS f-»
+				«f.name.toFirstLower()».setReadOnly(true);
+				«ENDFOREACH-»
+			}
+		}
+		«ENDFOREACH»
+		«ENDREM»
+	}
+	
+	@Override
+	public void onAttachedToHierarchy(FieldManager manager) {
+		super.onAttachedToHierarchy(manager);
+		«FOREACH fields AS f-»
+		«f.name.toFirstLower()».onAttachedToHierarchy(manager);
+		«ENDFOREACH-»
+	}
+
+	@Override
+	public void setValueInternal(«name.toFirstUpper()» value, boolean notifyChange) {
+		super.setValueInternal(value, notifyChange);
+		«FOREACH fields AS f-»
+		«f.name.toFirstLower()».setValueInternal(value != null ? value.get«f.name.toFirstUpper()»() : null, notifyChange);
+		«ENDFOREACH»
+	}
+	
+	@Override
+	public boolean isValid() {
+		«FOREACH fields AS f-»
+		if (!«f.name.toFirstLower()».isValid()) {
+			return false;
+		}
+		«ENDFOREACH-»
+		return true;
+	}
+	
+	@Override
+	public void onValueChange(BaseField<?> field) {
+		«name.toFirstUpper()» value = getValue();
+		if (value == null) {
+			value = new «name.toFirstUpper()»();
+			setValueInternal(value, true);
+		}
+		switch (field.getId()) {
+		«FOREACH fields AS f-»
+		case R.id.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR f»:
+			value.set«f.name.toFirstUpper()»(«f.name.toFirstLower()».getValue());
+			break;
+		«ENDFOREACH-»
+		default:
+			break;
+		}
+	}
+	
+	public void updateErrorEntries(List<ErrorEntry> errors, int tag) {
+		«FOREACH fields AS f-»
+		if (!«f.name.toFirstLower()».isValid()) {
+			«IF RelationFieldEntity.isAssignableFrom(f.metaType) && ((RelationFieldEntity) f).nestedForm && ((RelationFieldEntity) f).cardinality == 1-»
+			«f.name.toFirstLower()».updateErrorEntries(errors, tag);
+			«ELSE-»
+			errors.add(«f.name.toFirstLower()».getErrorEntry(tag));
+			«ENDIF-»
+		}
+		«ENDFOREACH-»
+	}
+	
+	public «name.toFirstUpper()» getParentBean() {
+		return getValue();
+	}
+	
+«ENDLET-»
+}
+«ENDFILE»
+«ENDIF»
+«ENDDEFINE»

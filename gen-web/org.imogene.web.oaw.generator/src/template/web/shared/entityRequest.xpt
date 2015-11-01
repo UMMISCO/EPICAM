@@ -1,0 +1,72 @@
+«IMPORT core»
+«EXTENSION template::CommonEntityUtilExt» 
+
+
+«DEFINE generate(String packageName, String projectName, String applicationType) FOR CardEntity»
+«FILE projectName.toLowerCase()+ "/shared/request/" + this.name.toFirstUpper() + "Request.java"»
+package org.imogene.«projectName.toLowerCase()».shared.request;
+
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.Service;
+
+import java.util.List;
+import java.util.Set;
+
+import org.imogene.«projectName.toLowerCase()».server.handler.«name.toFirstUpper()»Handler;
+import org.imogene.«projectName.toLowerCase()».shared.proxy.«name.toFirstUpper()»Proxy;
+import org.imogene.web.server.locator.SpringServiceLocator;
+import org.imogene.web.shared.proxy.ImogBeanProxy;
+import org.imogene.web.shared.proxy.criteria.BasicCriteriaProxy;
+import org.imogene.web.shared.proxy.criteria.ImogJunctionProxy;
+import org.imogene.web.shared.request.ImogEntityRequest;
+«IF hasDynamicFields -»
+import org.imogene.web.shared.request.DynamicFieldsRequest;
+«ENDIF-»
+
+/**
+ * Source of request objects for the «name.toFirstUpper()» Service.
+ * @author Medes-IMPS
+ */
+@Service(value= «name.toFirstUpper()»Handler.class, locator = SpringServiceLocator.class)
+public interface «name.toFirstUpper()»Request extends ImogEntityRequest«IF hasDynamicFields», DynamicFieldsRequest«ENDIF»{
+
+	Request<«name.toFirstUpper()»Proxy> findById(String id);
+
+	Request<Void> save(«name.toFirstUpper()»Proxy c, boolean isNew);	
+	«IF applicationType == "admin" && Actor.isAssignableFrom(metaType)-»
+	Request<Void> save(«name.toFirstUpper()»Proxy c, boolean isNew, boolean passwordChanged);	
+	«ENDIF-»
+	
+	Request<List<«name.toFirstUpper()»Proxy>> list«name.toFirstUpper()»(String sortProperty, boolean sortOrder);
+	Request<List<«name.toFirstUpper()»Proxy>> list«name.toFirstUpper()»(int first, int max, String sortProperty, boolean sortOrder);
+	Request<List<«name.toFirstUpper()»Proxy>> list«name.toFirstUpper()»(int first, int max, String sortProperty, boolean sortOrder, ImogJunctionProxy criterions);
+	Request<List<«name.toFirstUpper()»Proxy>> list«name.toFirstUpper()»(int first, int max, String sortProperty, boolean sortOrder, List<BasicCriteriaProxy> criterions);
+	Request<List<«name.toFirstUpper()»Proxy>> listNonAffected«name.toFirstUpper()»(int i, int j, String sortProperty, boolean sortOrder, String property);
+	Request<List<«name.toFirstUpper()»Proxy>> listNonAffected«name.toFirstUpper()»(int i, int j, String sortProperty, boolean sortOrder, ImogJunctionProxy criterions, String property);
+	Request<List<«name.toFirstUpper()»Proxy>> listNonAffected«name.toFirstUpper()»Reverse(int i, int j, String sortProperty, boolean sortOrder, String property);
+	Request<List<«name.toFirstUpper()»Proxy>> listNonAffected«name.toFirstUpper()»Reverse(int i, int j, String sortProperty, boolean sortOrder, ImogJunctionProxy criterions, String property);
+	Request<List<«name.toFirstUpper()»Proxy>> get«name.toFirstUpper()»EmptyList();
+
+	Request<Long> count«name.toFirstUpper()»();
+	Request<Long> count«name.toFirstUpper()»(ImogJunctionProxy criterions);
+	Request<Long> countNonAffected«name.toFirstUpper()»(String property);
+	Request<Long> countNonAffected«name.toFirstUpper()»(String property, ImogJunctionProxy criterions);
+	Request<Long> countNonAffected«name.toFirstUpper()»Reverse(String property);
+	Request<Long> countNonAffected«name.toFirstUpper()»Reverse(String property, ImogJunctionProxy criterions);
+	
+	Request<Void> delete(Set<«name.toFirstUpper()»Proxy> entities);
+	Request<Void> delete(«name.toFirstUpper()»Proxy entity);
+	
+	Request<Void> save(ImogBeanProxy entity, boolean isNew);
+	Request<Void> delete(ImogBeanProxy entity);
+	
+    «IF name == "Lot" -»
+	Request<Boolean> isLotUniqueForCdt(String numero, String cdtId);
+	«ELSEIF name == "Patient"-»
+	Request<Long> countPatientFilteredByCdt(ImogJunctionProxy criterions, String cdtId);
+	
+	Request<List<PatientProxy>> listPatientFilteredByCdt(int first, int max, String sortProperty, boolean sortOrder, ImogJunctionProxy criterions, String cdtId);			
+    «ENDIF-»	
+}
+«ENDFILE»
+«ENDDEFINE»

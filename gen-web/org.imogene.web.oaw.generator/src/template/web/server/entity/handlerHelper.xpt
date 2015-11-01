@@ -1,0 +1,87 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt» 
+«EXTENSION template::CommonEntityUtilExt» 
+
+
+«DEFINE generate(String packageName, String projectName) FOR Project»
+«FILE projectName.toLowerCase()+ "/server/handler/HandlerHelperImpl.java"»
+package org.imogene.«projectName.toLowerCase()».server.handler;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.imogene.lib.common.entity.ImogActor;
+import org.imogene.lib.common.entity.ImogBean;
+import org.imogene.web.server.handler.BasicHandlerHelper;
+import org.imogene.«projectName.toLowerCase()».domain.entity.*;
+
+public class HandlerHelperImpl extends BasicHandlerHelper {
+
+	private static final Logger logger = Logger.getLogger(HandlerHelperImpl.class);
+
+	«FOREACH entities AS e-»
+	private «e.name.toFirstUpper()»Handler «e.name.toFirstLower()»Handler;
+	«ENDFOREACH-»
+	
+	@Override
+	public void delete(ImogBean bean) {
+		super.delete(bean);
+		«FOREACH entities AS e SEPARATOR " else "»
+		if (bean instanceof «e.name.toFirstUpper()») {
+			«e.name.toFirstLower()»Handler.delete((«e.name.toFirstUpper()») bean);
+		}
+		«ENDFOREACH»
+	}
+	
+	@Override
+	public void save(ImogBean bean, boolean isNew) {
+		super.save(bean, isNew);
+		«FOREACH entities AS e SEPARATOR " else "»
+		if (bean instanceof «e.name.toFirstUpper()») {
+			«e.name.toFirstLower()»Handler.save((«e.name.toFirstUpper()») bean, isNew);
+		}
+		«ENDFOREACH»
+	}
+	
+	@Override
+	public void detach(ImogActor actor) {
+		«EXPAND handleFilterFields FOREACH entities-»
+		super.detach(actor);
+	}
+	
+	«FOREACH entities AS e-»
+	/**
+	 * Setter for bean injection
+	 * @param handler the «e.name.toFirstUpper()» Handler
+	 */
+	public void set«e.name.toFirstUpper()»Handler(«e.name.toFirstUpper()»Handler handler) {
+		this.«e.name.toFirstLower()»Handler = handler;
+	}
+	«ENDFOREACH-»
+}
+
+
+«ENDFILE»
+«ENDDEFINE»
+
+
+
+
+
+«DEFINE handleFilterFields FOR CardEntity-»
+«ENDDEFINE»
+
+«DEFINE handleFilterFields FOR Actor-»
+«IF filters.size > 0-»
+if (actor instanceof «name.toFirstUpper()») {
+	«FOREACH filters AS f-»
+	List<«f.entity.name.toFirstUpper()»> filters = ((«name.toFirstUpper()») actor).«EXPAND template::CommonFieldUtil::getterName FOR f»();
+	if (filters != null) {
+		for («f.entity.name.toFirstUpper()» filter : filters) {
+			logger.info("Has filter : " + filter.getId());
+		}
+	}
+	«ENDFOREACH-»
+}
+«ENDIF-»
+«ENDDEFINE-»

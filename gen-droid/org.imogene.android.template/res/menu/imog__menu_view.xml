@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/imog__menu_edit"
+        android:icon="@drawable/imog__ic_action_edit"
+        android:showAsAction="ifRoom"
+        android:title="@string/imog__menu_edit"/>
+    <item
+        android:id="@+id/imog__menu_delete"
+        android:icon="@drawable/imog__ic_action_remove"
+        android:showAsAction="ifRoom"
+        android:title="@string/imog__menu_delete"/>
+    <item
+        android:id="@+id/imog__menu_sync"
+        android:icon="@drawable/imog__ic_action_refresh"
+        android:title="@string/imog__menu_sync"/>
+    <item
+        android:id="@+id/imog__menu_info"
+        android:icon="@drawable/imog__ic_action_about"
+        android:title="@string/imog__menu_info"/>
+    <item
+        android:id="@+id/imog__menu_iamlost"
+        android:icon="@drawable/imog__ic_action_place"
+        android:title="@string/imog__menu_iamlost"/>
+
+</menu>

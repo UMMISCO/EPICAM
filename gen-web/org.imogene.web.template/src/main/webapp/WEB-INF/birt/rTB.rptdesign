@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 4.3.1.v201309091055 Build &lt;4.3.1.v20130917-1035></property>
+    <property name="units">in</property>
+    <property name="iconFile">/templates/chart_listing.gif</property>
+    <property name="cheatSheet">org.eclipse.birt.report.designer.ui.cheatsheet.chartlisting</property>
+    <property name="bidiLayoutOrientation">ltr</property>
+    <property name="imageDPI">96</property>
+    <parameters>
+        <scalar-parameter name="loc" id="142">
+            <property name="valueType">static</property>
+            <property name="isRequired">false</property>
+            <property name="dataType">string</property>
+            <property name="distinct">true</property>
+            <simple-property-list name="defaultValue">
+                <value type="constant"></value>
+            </simple-property-list>
+            <list-property name="selectionList"/>
+            <property name="paramType">simple</property>
+            <property name="controlType">text-box</property>
+            <structure name="format">
+                <property name="category">Unformatted</property>
+            </structure>
+        </scalar-parameter>
+    </parameters>
+    <data-sources>
+        <script-data-source name="ReportServiceHandler" id="39"/>
+    </data-sources>
+    <data-sets>
+        <script-data-set name="TBRegDataSet" id="41">
+            <list-property name="resultSetHints">
+                <structure>
+                    <property name="position">1</property>
+                    <property name="name">columnIdPatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">2</property>
+                    <property name="name">columnNomPatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">3</property>
+                    <property name="name">columnIdSexePatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">4</property>
+                    <property name="name">columnAgePatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
+                    <property name="name">columnProfessionPatient</property>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="columnHints">
+                <structure>
+                    <property name="columnName">columnIdPatient</property>
+                    <text-property name="displayName">fieldIdPatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnNomPatient</property>
+                    <text-property name="displayName">fieldNomPatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnIdSexePatient</property>
+                    <text-property name="displayName">fieldSexePatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnAgePatient</property>
+                    <text-property name="displayName">fieldAgePatient</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">columnProfessionPatient</property>
+                    <text-property name="displayName">fieldProfessionPatient</text-property>
+                </structure>
+            </list-property>
+            <structure name="cachedMetaData">
+                <list-property name="resultSet">
+                    <structure>
+                        <property name="position">1</property>
+                        <property name="name">columnIdPatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">2</property>
+                        <property name="name">columnNomPatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">3</property>
+                        <property name="name">columnIdSexePatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">4</property>
+                        <property name="name">columnAgePatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
+                        <property name="name">columnProfessionPatient</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                </list-property>
+            </structure>
+            <method name="beforeOpen"><![CDATA[			
+			count = 0;
+			
+			// Get instance of Renderer
+			beanRenderer = Packages.org.imogene.epicam.server.EpicamServerRenderer.get();
+			beanRenderer.setLocale(params["loc"]);
+			
+			
+			reportServiceHandler = spring.getBean("reportServiceHandler");
+			
+			beans = reportServiceHandler.getRegTB("modified", false);	
+]]></method>
+            <property name="dataSource">ReportServiceHandler</property>
+            <method name="fetch"><![CDATA[if(beans !=null){
+	if(count <beans.size()){
+		var bean = beans.get(count);
+		row["columnIdPatient"] = bean.getColumnIdPatient();
+		row["columnNomPatient"] = bean.getColumnNomPatient();
+		row["columnSexePatient"] = bean.getColumnSexePatient();
+		row["columnAgePatient"] = bean.getColumnAgePatient();
+		row["columnProfessionPatient"] = bean.getColumnProfessionPatient();
+		count++;
+		return true;
+	}
+}
+return false;
+]]></method>
+        </script-data-set>
+    </data-sets>
+    <styles>
+        <style name="report" id="33">
+            <property name="fontFamily">sans-serif</property>
+            <property name="fontSize">10pt</property>
+        </style>
+        <style name="crosstab-cell" id="37">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+        <style name="crosstab" id="38">
+            <property name="borderBottomColor">#CCCCCC</property>
+            <property name="borderBottomStyle">solid</property>
+            <property name="borderBottomWidth">1pt</property>
+            <property name="borderLeftColor">#CCCCCC</property>
+            <property name="borderLeftStyle">solid</property>
+            <property name="borderLeftWidth">1pt</property>
+            <property name="borderRightColor">#CCCCCC</property>
+            <property name="borderRightStyle">solid</property>
+            <property name="borderRightWidth">1pt</property>
+            <property name="borderTopColor">#CCCCCC</property>
+            <property name="borderTopStyle">solid</property>
+            <property name="borderTopWidth">1pt</property>
+        </style>
+    </styles>
+    <page-setup>
+        <simple-master-page name="Simple MasterPage" id="2">
+            <property name="type">custom</property>
+            <property name="orientation">landscape</property>
+            <property name="height">297mm</property>
+            <property name="width">420mm</property>
+            <method name="onPageStart"><![CDATA[ reportContext.getDesignHandle().getMasterPages().get(0).setProperty("orientation","landscape");]]></method>
+            <page-footer>
+                <text id="3">
+                    <property name="contentType">html</property>
+                    <text-property name="content"><![CDATA[<value-of>new Date()</value-of>]]></text-property>
+                </text>
+            </page-footer>
+        </simple-master-page>
+    </page-setup>
+    <body>
+        <table id="126">
+            <property name="dataSet">TBRegDataSet</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">columnIdPatient</property>
+                    <text-property name="displayName">fieldIdPatient</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["columnIdPatient"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">columnNomPatient</property>
+                    <text-property name="displayName">fieldNomPatient</text-property>
+                    <expression name="expression" type="javascript">dataSetRow["columnNomPatient"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <column id="140"/>
+            <column id="141"/>
+            <header>
+                <row id="127">
+                    <cell id="128">
+                        <label id="129">
+                            <text-property name="text">fieldIdPatient</text-property>
+                        </label>
+                    </cell>
+                    <cell id="130">
+                        <label id="131">
+                            <text-property name="text">fieldNomPatient</text-property>
+                        </label>
+                    </cell>
+                </row>
+            </header>
+            <detail>
+                <row id="132">
+                    <cell id="133">
+                        <data id="134">
+                            <property name="resultSetColumn">columnIdPatient</property>
+                        </data>
+                    </cell>
+                    <cell id="135">
+                        <data id="136">
+                            <property name="resultSetColumn">columnNomPatient</property>
+                        </data>
+                    </cell>
+                </row>
+            </detail>
+        </table>
+    </body>
+</report>

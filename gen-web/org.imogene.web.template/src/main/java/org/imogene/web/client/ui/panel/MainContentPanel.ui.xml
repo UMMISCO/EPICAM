@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:imo='urn:import:org.imogene.web.client.ui.menu'>
+
+	<ui:style src="../../css/ImogCss.css">
+	
+		.imogene-ContentComposite {
+			width: 95%;
+			margin-left: 10px;
+			margin-right: 10px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+			height: 100%;
+		}
+		
+	</ui:style>
+
+	<g:HorizontalPanel ui:field="layout" styleName="{style.pageBackground} {style.imogene-ContentComposite}" horizontalAlignment="center" verticalAlignment="top">
+	</g:HorizontalPanel>
+	
+
+</ui:UiBinder> 

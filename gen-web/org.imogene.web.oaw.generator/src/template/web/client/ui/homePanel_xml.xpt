@@ -1,0 +1,217 @@
+«IMPORT core»
+«EXTENSION template::CommonEntityUtilExt» 
+«DEFINE generate(String packageName, String projectName, String applicationType) FOR Project»
+«FILE projectName.toLowerCase()+"/client/ui/panel/HomePanel.ui.xml"»
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	xmlns:imo='urn:import:org.imogene.web.client.ui.field.group'
+	xmlns:imo2='urn:import:org.imogene.web.client.ui.panel'
+	xmlns:imo3='urn:import:org.imogene.epicam.client.ui.panel'>
+
+	<ui:style src="../../../../web/client/css/ImogCss.css">
+		.mainPanel {
+			width: 100%;
+			height: 100%;
+		}
+		
+		.title {
+			margin-bottom: 20px;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.imogene-scroll {
+			width: 100%;
+			height: 95%;
+		}
+		.contentPanel {
+			width: 90%;
+			height: 100%;
+			margin-bottom: 10%;
+		}
+
+		
+
+		.imog-hlk {
+			cursor: pointer;
+			color: #444444;
+			font-size: 16px;
+		}
+
+		.imog-hlk a {
+			cursor: pointer;
+			color: #444444;
+		}
+
+		.imog-hlk a:hover {
+			text-decoration: underline;
+		}
+
+		.imog-menuItemPanel {
+			background: white;
+		}
+		
+		.messagePanel {
+			text-align: justify;
+		}		
+
+		.gwt-StackPanel {
+			background: white;
+  			border-bottom: 1px solid #bbbbbb;
+			border-top: 1px solid #bbbbbb;
+			border-right: 1px solid #bbbbbb;
+			border-left: 1px solid #bbbbbb;
+			width: 250px;
+			margin-right: 20px;
+		}
+
+		.gwt-StackPanel .gwt-StackPanelItem {
+  			cursor: pointer;
+  			cursor: hand;
+  			font-weight: bold;
+  			font-size: 1.3em;
+  			padding: 3px;
+  			border: 0px solid #bbbbbb;
+  			border-bottom: 0px;
+  			/*background: #d3def6 url(images/hborder.png) repeat-x 0px -989px;*/
+		}
+
+		.gwt-StackPanel .gwt-StackPanelContent {
+  			border: 0px solid #bbbbbb;
+  			border-bottom: 0px;
+  			background: white;
+  			padding: 2px 2px 10px 5px;
+			width: 100%;
+			height: 200px;
+		}		
+
+
+		@external .gwt-StackPanel, .gwt-StackPanelItem, .gwt-StackPanelContent;
+	</ui:style>
+
+	<g:DockPanel styleName="{style.pageBackground} {style.mainPanel}" >
+		«IF applicationType != "admin"-»
+		<g:Dock direction="WEST">
+			<g:StackPanel ui:field="stackPanel">
+			     <g:VerticalPanel g:StackPanel-text="PATIENTS - EXAMENS" styleName="{style.imog-menuItemPanel}">
+						<g:Hyperlink text="Patients" ui:field="linkPatient" styleName="{style.imog-hlk}" />
+						<g:Hyperlink text="Examens" ui:field="linkExamen" styleName="{style.imog-hlk}" />
+						<g:Hyperlink text="Carte" ui:field="linkMap" styleName="{style.imog-hlk}" />
+				</g:VerticalPanel>
+				<g:VerticalPanel g:StackPanel-text="SMS - FORMATION" styleName="{style.imog-menuItemPanel}">
+						<g:Hyperlink text="ACMS" ui:field="linkAcms" styleName="{style.imog-hlk}" />
+						<g:Hyperlink text="Formation" ui:field="linkFormation" styleName="{style.imog-hlk}" />
+				</g:VerticalPanel>
+				<g:VerticalPanel g:StackPanel-text="GESTION DE STOCK" styleName="{style.imog-menuItemPanel}">
+						<g:Hyperlink text="Gestion du stock" ui:field="linkStock" styleName="{style.imog-hlk}" />
+				</g:VerticalPanel>
+				<g:VerticalPanel g:StackPanel-text="ADMINISTRATION" styleName="{style.imog-menuItemPanel}">
+						<g:Hyperlink text="Administration" ui:field="linkAdministration" styleName="{style.imog-hlk}" />
+						<g:Hyperlink text="Administration des medicaments" ui:field="linkAdministrationMedicament" styleName="{style.imog-hlk}" />
+						<g:Hyperlink text="Resources Humaines" ui:field="linkResourcesHumaines" styleName="{style.imog-hlk}" />
+				</g:VerticalPanel>
+				
+<!-- 				help link -->
+				<g:VerticalPanel g:StackPanel-text="AIDE" styleName="{style.imog-menuItemPanel}">
+						<g:Hyperlink text="Aide" ui:field="linkHelp" styleName="{style.imog-hlk}" />
+				</g:VerticalPanel>
+			</g:StackPanel>
+		</g:Dock>
+		«ENDIF-»
+		<g:Dock direction="CENTER" >
+			<g:ScrollPanel ui:field="scrollPanel" styleName="{style.imogene-scroll}">
+
+				<g:VerticalPanel styleName="{style.pageBackground} {style.contentPanel}" horizontalAlignment="center" verticalAlignment="top">
+
+
+		«IF applicationType == "admin"-»
+					<g:cell horizontalAlignment="center">
+						<imo:FieldGroupPanel ui:field="temaUsers">
+							<g:FlowPanel>
+								«FOREACH entities AS e-»
+								«IF Actor.isAssignableFrom(e.metaType)-»
+								<imo2:EntityPanel ui:field="«e.name.toFirstLower()»" />	
+								«ENDIF-»
+								«ENDFOREACH -»															
+							</g:FlowPanel>			
+						</imo:FieldGroupPanel>	
+					</g:cell>		
+
+					<g:cell horizontalAlignment="center">
+						<imo:FieldGroupPanel ui:field="temaAdministration">
+							<g:FlowPanel>
+								<imo2:EntityPanel ui:field="profile" />
+								<imo2:EntityPanel ui:field="notification" />
+								<imo2:EntityPanel ui:field="dynamicField_Template" />
+							</g:FlowPanel>			
+						</imo:FieldGroupPanel>	
+					</g:cell>
+					
+					<g:cell horizontalAlignment="center">
+						<imo:FieldGroupPanel ui:field="temaModel">
+							<g:FlowPanel>
+								<imo2:EntityPanel ui:field="cardEntity" />
+								<imo2:EntityPanel ui:field="fieldGroup" />
+							</g:FlowPanel>
+						</imo:FieldGroupPanel>
+					</g:cell>
+		«ELSE-»				
+				«IF themas!=null && themas.size>0-»				    
+						«FOREACH themas AS t ITERATOR iter»
+					<g:cell horizontalAlignment="center">
+						<imo:FieldGroupPanel ui:field="tema«t.name.toFirstUpper()»">
+							<g:FlowPanel>
+							«FOREACH t.entities AS e -»
+									«IF e.topLevel-»
+								<imo2:EntityPanel ui:field="«e.name.toFirstLower()»" />
+									«ENDIF-»
+								«ENDFOREACH -»
+								«IF t.name.toString().compareTo("Administration")==0-»
+									<imo3:RapportPanel ui:field="rapport" />
+								«ENDIF-»
+								«IF t.name.toString().compareTo("ACMS")==0-»
+									<imo3:SmsPanel ui:field="envoiSms" />
+								«ENDIF-»
+								
+							</g:FlowPanel>			
+						</imo:FieldGroupPanel>	
+					</g:cell>					
+						«ENDFOREACH -»
+				«ELSE-»
+					<g:cell horizontalAlignment="center">
+						<imo:FieldGroupPanel ui:field="defaultTema">							
+							<g:HorizontalPanel>
+							«FOREACH entities AS e -»
+									«IF e.topLevel-»
+								<imo2:EntityPanel ui:field="«e.name.toFirstLower()»" />
+									«ENDIF-»
+								«ENDFOREACH -»	
+							</g:HorizontalPanel>			
+						</imo:FieldGroupPanel>	
+					</g:cell>								
+				«ENDIF-»				
+		«ENDIF-»					
+					<!-- 			add for help -->
+					<g:cell horizontalAlignment="center">
+						<imo:FieldGroupPanel ui:field="temaHelp">
+							<g:FlowPanel>
+								<g:HTML wordWrap="true" ui:field="helpMessage" styleName="{style.messagePanel}"/>								
+							</g:FlowPanel>			
+						</imo:FieldGroupPanel>	
+					</g:cell>
+					
+					<g:cell horizontalAlignment="center">
+						<g:HTML wordWrap="true" ui:field="homeMessage" styleName="{style.messagePanel}"/>
+					</g:cell>
+					
+
+
+				</g:VerticalPanel>
+
+			</g:ScrollPanel>
+		</g:Dock>
+	</g:DockPanel>
+</ui:UiBinder>
+
+«ENDFILE-»
+«ENDDEFINE»

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="fieldLayoutHeight" format="dimension">
+
+        <!-- The view should be as big as its parent (minus padding) -->
+        <enum name="fill_parent" value="-1" />
+        <!-- The view should be as big as its parent (minus padding) -->
+        <enum name="match_parent" value="-1" />
+        <!-- The view should be only big enough to enclose its content (plus padding). -->
+        <enum name="wrap_content" value="-2" />
+    </attr>
+
+    <declare-styleable name="DateTimePicker">
+
+        <!-- The first year (inclusive) i.e. 1940 -->
+        <attr name="startYear" format="integer" />
+        <!-- The last year (inclusive) i.e. 2010 -->
+        <attr name="endYear" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="FilterPreference">
+
+        <!-- The card entity on which this filter refers -->
+        <attr name="filterEntity" format="string" />
+        <!-- The field entity on which this filter refers -->
+        <attr name="filterField" format="string" />
+    </declare-styleable>
+    <declare-styleable name="EnumFilterPreference">
+
+        <!-- Defines whether this enumeration is a multiple selection. -->
+        <attr name="filterMultiple" format="boolean" />
+        <!-- The human-readable array to present as a list -->
+        <attr name="filterItems" format="reference" />
+        <!-- Conversion array for enumerate field -->
+        <attr name="filterItemsValues" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="RelationFilterPreference">
+
+        <!-- The card entity web service -->
+        <attr name="filterEntityws" format="string" />
+        <!-- The hierarchical field to filter on -->
+        <attr name="filterHierarchicalField" format="string" />
+    </declare-styleable>
+    <declare-styleable name="BaseField">
+
+        <!-- Indicates whether this field is dependent of the value of an other	field -->
+        <attr name="dependent" format="boolean" />
+        <!-- The title of the field -->
+        <attr name="title" />
+        <!-- Indicates whether this field is hidden or not -->
+        <attr name="hidden" format="boolean" />
+        <!-- The default text to display when the field is empty -->
+        <attr name="emptyText" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="BaseFieldEdit">
+
+        <!-- The help of the field -->
+        <attr name="help" format="reference" />
+        <!-- Indicates whether this field is required or not -->
+        <attr name="required" format="boolean" />
+        <!-- Indicates whether this field is read only or not -->
+        <attr name="readOnly" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="StringFieldEdit">
+
+        <!-- The input type -->
+        <attr name="stringType">
+            <enum name="string" value="0" />
+            <enum name="address" value="1" />
+            <enum name="phone" value="2" />
+            <enum name="text" value="3" />
+            <enum name="email" value="4" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="GeoFieldEdit">
+
+        <!-- The gps location providers -->
+        <attr name="geoType">
+            <enum name="gps" value="0" />
+            <enum name="network" value="1" />
+            <enum name="map" value="2" />
+            <enum name="best" value="3" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="EnumField">
+
+        <!-- The human-readable array to present as a list -->
+        <attr name="items" format="reference" />
+        <!-- Conversion array for enumerate field -->
+        <attr name="itemsValues" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="NumberField">
+
+        <!-- Unit reference id of a numeric field -->
+        <attr name="unit" format="reference" />
+        <!-- Formatter reference id of a numeric field -->
+        <attr name="format" format="reference" />
+        <!-- The minimum value this field can take -->
+        <attr name="intMin" format="integer" />
+        <!-- The maximum value this field can take -->
+        <attr name="intMax" format="integer" />
+        <!-- The minimum value this field can take -->
+        <attr name="floatMin" format="float" />
+        <!-- The maximum value this field can take -->
+        <attr name="floatMax" format="float" />
+    </declare-styleable>
+    <declare-styleable name="DatesFieldEdit">
+
+        <!-- The minimum value this field can take -->
+        <attr name="dateMin" format="string" />
+        <!-- The maximum value this field can take -->
+        <attr name="dateMax" format="string" />
+    </declare-styleable>
+    <declare-styleable name="RelationField">
+
+        <!-- Has a reverse relation field -->
+        <attr name="hasReverse" format="boolean" />
+        <!-- Reference to the plural display value -->
+        <attr name="display" format="reference" />
+        <!-- Opposite cardinality -->
+        <attr name="oppositeCardinality" format="integer" />
+        <!-- Relation type (main or reverse) -->
+        <attr name="relationType">
+            <enum name="main" value="0" />
+            <enum name="reverse" value="1" />
+        </attr>
+    </declare-styleable>
+
+</resources>

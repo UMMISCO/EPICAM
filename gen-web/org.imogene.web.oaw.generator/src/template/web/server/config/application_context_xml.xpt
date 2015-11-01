@@ -1,0 +1,259 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt» 
+«EXTENSION template::CommonEntityUtilExt»
+
+«DEFINE generate(String projectName, String applicationType, String embedded) FOR Project-»
+«FILE "application-context.xml"-»
+<?xml version="1.0" encoding="iso-8859-1"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:aop="http://www.springframework.org/schema/aop"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:task="http://www.springframework.org/schema/task"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-3.0.xsd
+     http://www.springframework.org/schema/task
+     http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+     
+	<!-- Annotations Scan -->
+    <context:annotation-config/>
+
+	<!-- Application properties -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+		    <value>/WEB-INF/application.properties</value>
+		</property>
+	</bean>
+	
+	<!-- Spring security policy -->
+	<bean id="accessPolicyFactory" class="org.imogene.«projectName.toLowerCase()».server.security.AccessPolicyFactoryImpl" />
+	
+	<!-- Spring-security users details provider -->
+	<bean id="imogSecurityDetailService" class="org.imogene.web.server.security.SecurityDetailService" >
+		<property name="genericHandler" ref="genericHandler"/>
+		<property name="handlerHelper" ref="handlerHelper"/>
+		<property name="accessPolicyFactory" ref="accessPolicyFactory" />
+  	</bean>
+  	
+	<!-- Spring-security access denied handler -->
+	<bean class="org.imogene.web.server.security.ImogAccessDeniedHandler" id="imogAccessDeniedUrl">
+        <property name="accessDeniedUrl" value="jsp/WrongLogin.jsp" />
+    </bean> 
+		
+	<!-- Video converter -->
+	<bean name="videoConverter" class="org.imogene.lib.media.VideoConverter">
+		<property name="commandLine" value="${converter.video}" />
+	</bean>
+
+	<!-- Audio converter -->
+	<bean name="audioConverter" class="org.imogene.lib.media.AudioConverter">
+		<property name="commandLine" value="${converter.video}" />
+	</bean>
+
+	<!-- Photo converter -->
+	<bean name="photoConverter" class="org.imogene.lib.media.PhotoConverter" />
+
+	<bean id="binaryOperation" class="org.imogene.lib.media.BinaryOperation">
+		<property name="audioConverter" ref="audioConverter" />
+		<property name="videoConverter" ref="videoConverter" />
+		<property name="photoConverter" ref="photoConverter" />
+	</bean>
+	
+	<!-- Services -->
+	<bean id="binaryDownloadService" class="org.imogene.web.server.service.BinaryDownloadServiceImpl" />
+	<bean id="binaryUploadService" class="org.imogene.web.server.service.BinaryUploadServiceImpl" />
+	
+	<!-- Handlers -->
+
+	<!-- Generic handler -->	
+	<bean id="genericHandler" class="org.imogene.web.server.handler.GenericHandler">
+		<property name="dao" ref="genericDao" />
+	</bean>	
+
+	<!-- Binary handler -->		
+	<bean id="binaryHandler" class="org.imogene.web.server.handler.BinaryHandler">
+		<property name="dao" ref="binaryDao" />
+	</bean>
+
+	<!-- Session handler -->	
+	<bean id="sessionHandler" class="org.imogene.web.server.handler.SessionHandler"/>
+	
+	<!-- Dynamic Fields handler -->
+	<bean id="dynamicFieldTemplateHandler" class="org.imogene.web.server.handler.DynamicFieldTemplateHandler">
+		<property name="dao" ref="dynamicFieldTemplateDao" />
+		<property name="dynamicFieldInstanceFieldTemplateDao" ref="dynamicFieldInstanceDao"/>
+		<property name="systemUtil" ref="systemUtil" />		
+	</bean>		
+	<bean id="dynamicFieldInstanceHandler" class="org.imogene.web.server.handler.DynamicFieldInstanceHandler">
+		<property name="dao" ref="dynamicFieldInstanceDao" />
+		<property name="fieldTemplateHandler" ref="dynamicFieldTemplateHandler" />
+	</bean>
+	
+	<!-- Profile handlers -->
+	<bean id="cardEntityHandler" class="org.imogene.web.server.handler.CardEntityHandler">
+		<property name="dao" ref="cardEntityDao" />
+		<property name="entityProfileDao" ref="entityProfileDao" />
+		<property name="fieldGroupProfileDao" ref="fieldGroupProfileDao" />
+		<property name="fieldGroupDao" ref="fieldGroupDao" />
+		<property name="systemUtil" ref="systemUtil" />
+		<property name="handlerHelper" ref="handlerHelper" />
+	</bean>
+	<bean id="entityProfileHandler" class="org.imogene.web.server.handler.EntityProfileHandler">
+		<property name="dao" ref="entityProfileDao" />
+		<property name="filter" ref="filter" />
+		<property name="systemUtil" ref="systemUtil" />
+		<property name="handlerHelper" ref="handlerHelper" />
+	</bean>
+	<bean id="fieldGroupHandler" class="org.imogene.web.server.handler.FieldGroupHandler">
+		<property name="dao" ref="fieldGroupDao" />
+		<property name="fieldGroupProfileDao" ref="fieldGroupProfileDao" />
+		<property name="filter" ref="filter" />
+		<property name="systemUtil" ref="systemUtil" />
+		<property name="handlerHelper" ref="handlerHelper" />
+	</bean>
+	<bean id="fieldGroupProfileHandler" class="org.imogene.web.server.handler.FieldGroupProfileHandler">
+		<property name="dao" ref="fieldGroupProfileDao" />
+		<property name="filter" ref="filter" />
+		<property name="systemUtil" ref="systemUtil" />
+		<property name="handlerHelper" ref="handlerHelper" />
+	</bean>
+	<bean id="profileHandler" class="org.imogene.web.server.handler.ProfileHandler">
+		<property name="dao" ref="profileDao" />
+		<property name="actorProfilesDao" ref="actorDao" />
+		<property name="entityProfileDao" ref="entityProfileDao" />
+		<property name="fieldGroupProfileDao" ref="fieldGroupProfileDao" />
+		<property name="filter" ref="filter" />
+		<property name="systemUtil" ref="systemUtil" />
+		<property name="handlerHelper" ref="handlerHelper" />
+		<property name="profileHelper" ref="profileHelper" />
+	</bean>
+	
+	<!-- Profile Helper -->
+	<bean id="profileHelper" class="org.imogene.«projectName.toLowerCase()».server.handler.ProfileHelperImpl">
+		<property name="cardEntityDao" ref="cardEntityDao" />
+		<property name="fieldGroupDao" ref="fieldGroupDao" />
+	</bean>
+	
+	«IF applicationType == "admin"-»
+	<!-- ImogActor handler -->
+	<bean id="imogActorHandler" class="org.imogene.web.server.handler.ImogActorHandler">
+		<property name="dao" ref="actorDao" />
+	</bean>
+
+	<!-- Notification handler -->
+	<bean id="notificationHandler" class="org.imogene.admin.server.handler.NotificationHandler">
+		<property name="dao" ref="notificationDao" />
+	</bean>		
+	«ENDIF-»		
+
+	<!-- Entity Handlers -->	
+	«FOREACH entities AS e -»
+	<bean id="«e.name.toFirstLower()»Handler" class="org.imogene.«projectName.toLowerCase()».server.handler.«e.name.toFirstUpper()»Handler">
+		<property name="dao" ref="«e.name.toFirstLower()»Dao" />
+		<property name="filter" ref="filter" />
+		«REM»«IF isBinaryFieldPresent(e.groups.fields) -»
+		<property name="binaryDao" ref="binaryDao" />
+		«ENDIF-»«ENDREM»
+		«IF e.hasDynamicFields -»
+		<property name="dynamicFieldValuesHandler" ref="dynamicFieldInstanceHandler" />
+		<property name="dynamicFieldTemplateHandler" ref="dynamicFieldTemplateHandler" />
+		«ENDIF-»
+		«REM»«EXPAND declareDaoForForeignKey(e) FOREACH entities.groups.fields-»«ENDREM»
+		<property name="handlerHelper" ref="handlerHelper" />
+		«IF e.name == "TransfertReference" -»
+		<property name="patientDao" ref="patientDao" />
+		«ENDIF-»				
+	</bean>		
+	«ENDFOREACH -»
+	
+	<bean id="handlerHelper" class="org.imogene.«projectName.toLowerCase()».server.handler.HandlerHelperImpl">
+		<property name="profileHandler" ref="profileHandler" />
+	    <property name="entityProfileHandler" ref="entityProfileHandler" />
+	    <property name="fieldGroupProfileHandler" ref="fieldGroupProfileHandler" />
+	    <property name="cardEntityHandler" ref="cardEntityHandler" />
+	    <property name="fieldGroupHandler" ref="fieldGroupHandler" />
+	    <property name="genericHandler" ref="genericHandler" />
+	    <property name="systemUtil" ref="systemUtil" />
+		«FOREACH entities AS e-»
+		<property name="«e.name.toFirstLower()»Handler" ref="«e.name.toFirstLower()»Handler" />
+		«ENDFOREACH-»
+	</bean>
+	
+	«IF embedded == "true"-»
+	<bean id="systemUtil" class="org.imogene.lib.sync.client.util.ClientSystemUtil" />
+	«ELSE-»
+	<bean id="systemUtil" class="org.imogene.lib.common.util.DefaultSystemUtil" />
+	«ENDIF-»
+	
+	
+	<!-- add handler for EPICAM project reporting -->	
+	<bean id="reportHandler" class="org.imogene.epicam.server.handler.ReportHandler" />
+	
+	
+	<bean id="formUtil" class="org.imogene.«projectName.toLowerCase()».server.util.«projectName.toFirstUpper()»FormUtil"/>	
+	
+	<!-- Bean filter handler for Birt --> 
+	<bean id="filter" class="org.imogene.«projectName.toLowerCase()».server.security.ImogBeanFilterImpl" />
+
+	<task:scheduler id="scheduler" />
+
+	«IF embedded == "false" && applicationType == "web"-»
+	<bean id="SMSService" class="org.imogene.epicam.server.service.SMSService">
+		<property name="uri" value="${sms.uri}" />
+		<property name="username" value="${sms.username}" />
+		<property name="password" value="${sms.password}" />
+		<property name="serviceId" value="${sms.serviceId}" />
+		<property name="method" value="${sms.method}" />
+		<property name="originatingAddress" value="${sms.originatingAddress}" />
+		<property name="operatorid" value="${sms.operatorid}" />
+		<property name="paycode" value="${sms.paycode}" />
+	</bean>
+
+	<bean id="smsServiceScheduler" class="org.imogene.epicam.server.service.SMSServiceScheduler" />
+	«ENDIF-»
+	
+	<bean id="updateRequiredViewsStartupJob" class="org.imogene.epicam.server.db.UpdateRequiredViewsStartupJob" />
+
+	<bean id="startupManager" class="org.imogene.web.server.startup.StartupManager">
+		<property name="jobs">
+			<list>
+				«IF embedded == "true"-»
+				<ref bean="synchronizationScheduler" />
+				<ref bean="ntpOffsetScheduler" />
+				«ENDIF-»
+				«IF embedded == "false" && applicationType == "web"-»
+				<ref bean="smsServiceScheduler" />
+				«ENDIF-»
+				<ref bean="updateRequiredViewsStartupJob" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM» ------------------------------------------ 
+      Declare DAO for foreign key deletion
+------------------------------------------------«ENDREM»
+«REM» ------------------------------------------------«ENDREM»
+«DEFINE declareDaoForForeignKey(CardEntity cardEntity) FOR FieldEntity-»«ENDDEFINE»
+«DEFINE declareDaoForForeignKey(CardEntity cardEntity) FOR RelationFieldEntity-»
+«IF cardEntity.name==this.entity.name -»	
+	«IF (this.cardinality == 1 && !(ReverseRelationFieldEntity.isAssignableFrom(this.metaType) && (getOppositeCardinality(this) == 1)))
+	|| (this.cardinality != 1 && (getOppositeCardinality(this) != 1))-»
+		<property name="«this.parentGroup.parentCard.name.toFirstLower()»«this.name.toFirstUpper()»Dao" ref="«this.parentGroup.parentCard.name.toFirstLower()»Dao"/>		
+     «ENDIF -»
+«ENDIF -»
+«ENDDEFINE»
+«REM» ------------------------------------------ «ENDREM»
+

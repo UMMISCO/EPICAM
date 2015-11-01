@@ -1,0 +1,176 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+
+
+
+«DEFINE classInClass FOR FieldEntity-»ERROR«ENDDEFINE»
+
+«DEFINE classInClass FOR StringField-»TextFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR TextField-»«IF translatable-»LocalizedTextFieldEdit«ELSE-»TextFieldEdit«ENDIF-»«ENDDEFINE»
+
+«DEFINE classInClass FOR BarcodeField-»BarcodeFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR GeoField-»GeoFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR FloatField-»FloatFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR IntegerField-»«IF max != null && max.length > 0 && min != null && min.length > 0-»BoundedIntegerFieldEdit«ELSE-»IntegerFieldEdit«ENDIF-»«ENDDEFINE»
+
+«DEFINE classInClass FOR BooleanField-»BooleanFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR EnumField-»«IF multipleSelection-»EnumMultipleFieldEdit«ELSE-»EnumSingleFieldEdit«ENDIF-»«ENDDEFINE»
+
+«DEFINE classInClass FOR DateField-»DateFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR TimeField-»TimeFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR DateTimeField-»DateTimeFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR BinaryField»BinaryFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR PhotoField»PhotoFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR VideoField»VideoFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR SoundField»SoundFieldEdit«ENDDEFINE»
+
+«DEFINE classInClass FOR RelationFieldEntity»«IF cardinality == 1»«IF nestedForm»«entity.name.toFirstUpper()»NestedEdit«ELSE»RelationOneFieldEdit<«entity.name.toFirstUpper()»>«ENDIF»«ELSE»«IF nestedForm»NestedRowFieldEdit<«entity.name.toFirstUpper()»>«ELSE»RelationManyFieldEdit<«entity.name.toFirstUpper()»>«ENDIF»«ENDIF»«ENDDEFINE»
+
+
+
+
+
+«DEFINE classInLayout FOR FieldEntity-»ERROR«ENDDEFINE»
+
+«DEFINE classInLayout FOR StringField-»TextFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR TextField-»«IF translatable-»LocalizedTextFieldEdit«ELSE-»TextFieldEdit«ENDIF-»«ENDDEFINE»
+
+«DEFINE classInLayout FOR BarcodeField-»BarcodeFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR GeoField-»GeoFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR FloatField-»FloatFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR IntegerField-»«IF max != null && max.length > 0 && min != null && min.length > 0-»BoundedIntegerFieldEdit«ELSE-»IntegerFieldEdit«ENDIF-»«ENDDEFINE»
+
+«DEFINE classInLayout FOR BooleanField-»BooleanFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR EnumField-»«IF multipleSelection-»EnumMultipleFieldEdit«ELSE-»EnumSingleFieldEdit«ENDIF-»«ENDDEFINE»
+
+«DEFINE classInLayout FOR DateField-»DateFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR TimeField-»TimeFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR DateTimeField-»DateTimeFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR BinaryField»BinaryFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR PhotoField»PhotoFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR VideoField»VideoFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR SoundField»SoundFieldEdit«ENDDEFINE»
+
+«DEFINE classInLayout FOR RelationFieldEntity»«IF cardinality == 1»«IF nestedForm»«entity.name.toFirstUpper()»NestedEdit«ELSE»RelationOneFieldEdit«ENDIF»«ELSE»«IF nestedForm»NestedRowFieldEdit«ELSE»RelationManyFieldEdit«ENDIF»«ENDIF»«ENDDEFINE»
+
+
+
+
+
+
+
+«DEFINE specificInit FOR FieldEntity-»
+«ENDDEFINE»
+
+«DEFINE specificInit FOR StringField-»
+«IF validationRules.size > 0-»
+«name.toFirstLower()».setRegexs(new String[] {«FOREACH validationRules AS v SEPARATOR ","»"«v.validationRegularExpression-»"«ENDFOREACH»});
+«name.toFirstLower()».setRegexDisplayIds(new int[] {«FOREACH validationRules AS v ITERATOR i SEPARATOR ","-»R.string.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR this»_val«i.counter0-»«ENDFOREACH-»});
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE specificInit FOR RelationFieldEntity-»
+«name.toFirstLower()».setRelationManager(this);
+«name.toFirstLower()».setContentUri(«entity.name.toFirstUpper()-».Columns.CONTENT_URI);
+«name.toFirstLower()».setDrawable(«entity.name.toFirstUpper()-».Columns.COLOR);
+«name.toFirstLower()».setTableName(«parentGroup.parentCard.name.toFirstUpper()».Columns.TABLE_NAME);
+«name.toFirstLower()».setFieldName(«EXPAND android::template::MedooAndroidFieldUtil::columnName FOR this»);
+«IF oppositeRelationField != null-»
+«name.toFirstLower()».setOppositeRelationField(«EXPAND android::template::MedooAndroidFieldUtil::columnName FOR oppositeRelationField»);
+«ENDIF-»
+«IF relationHierarchicalFilter.size == 2-»
+«LET relationHierarchicalFilter.get(0) AS parent-»
+«name.toFirstLower()».registerConstraintDependsOn(«parent.name.toFirstLower()»);
+«name.toFirstLower()».registerConstraintBuilder(new ConstraintBuilder() {
+	@Override
+	public Where onCreateConstraint() {
+		«IF parent.cardinality == 1-»
+		«parent.entity.name.toFirstUpper()» bean = «parent.name.toFirstLower()».getValue();
+		if (bean != null) {
+			return new Where().eq(«EXPAND android::template::MedooAndroidFieldUtil::columnName FOR relationHierarchicalFilter.get(1)», bean.getId());
+		}
+		«parent.name.toFirstLower()».showToastUnset();
+		return null;
+		«ELSE-»
+		List<«parent.entity.name.toFirstUpper()»> beans = «parent.name.toFirstLower()».getValue();
+		if (beans != null && beans.size() > 0) {
+			Object[] ids = new String[beans.size()];
+			for (int i = 0; i < beans.size(); i++) {
+				ids[i] = beans.get(i).getId();
+			}
+			return new Where().in(«EXPAND android::template::MedooAndroidFieldUtil::columnName FOR relationHierarchicalFilter.get(1)», ids);
+		}
+		«parent.name.toFirstLower()».showToastUnset();
+		return null;
+		«ENDIF-»
+	}
+});
+«ENDLET-»
+«ENDIF-»
+«FOREACH commonFields AS c ITERATOR i-»
+«IF (mod2(i.counter0) == 0)-»
+«name.toFirstLower()».registerCommonField(«commonFields.get(i.counter0).name.toFirstLower()», «EXPAND android::template::MedooAndroidFieldUtil::columnName FOR commonFields.get(i.counter1)»);
+«ENDIF-»
+«ENDFOREACH-»
+«ENDDEFINE»
+
+
+
+
+
+
+
+«DEFINE dependency FOR FieldDependentVisibility-»
+«IF !dependencyField.hidden-»
+«dependencyField.name.toFirstLower()».registerDependent(«parentFieldEntity.name.toFirstLower()», "«dependencyFieldValue»");
+«ENDIF-»
+«ENDDEFINE»
+
+
+
+
+«DEFINE updateAssociatedEntities FOR FieldEntity-»
+«ENDDEFINE»
+
+«DEFINE updateAssociatedEntities FOR BinaryField-»
+if (mEntity.get«name.toFirstUpper()»() != null && Binary.Columns.SYNC_TMP.equals(mEntity.get«name.toFirstUpper()»().getModifiedFrom())) {
+	Binary binary = mEntity.get«name.toFirstUpper()»();
+	binary.prepareForSave(this);
+	binary.saveOrUpdate(this);
+}
+«ENDDEFINE»
+
+«DEFINE updateAssociatedEntities FOR RelationFieldEntity-»
+«IF nestedForm && cardinality == 1-»
+if (mEntity.get«name.toFirstUpper()»() != null) {
+	«entity.name.toFirstUpper()» nested = mEntity.get«name.toFirstUpper()»();
+	nested.prepareForSave(this);
+	nested.saveOrUpdate(this);
+}
+«ENDIF-»
+«ENDDEFINE»
+
+

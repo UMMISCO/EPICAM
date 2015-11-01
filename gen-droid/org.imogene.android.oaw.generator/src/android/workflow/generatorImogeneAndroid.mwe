@@ -1,0 +1,402 @@
+<workflow>
+
+	<!-- property definition -->
+	<property name="imogeneMetaModel" value="metamodel/ImogeneModel.ecore"/>
+
+	<!-- model reader -->
+	<component file="workflow/modelReader.mwe" inheritAll="true" />
+	
+	<!-- ======================================================================================================================== -->
+	<!-- ===================================================== plugin files part ================================================ -->
+	<!-- ======================================================================================================================== -->
+	
+	<!-- ********************************************* -->
+	<!-- **************** Resources ****************** -->
+	<!-- ********************************************* -->
+	<!-- ===== Layouts ===== -->
+	
+	<!-- Entities edition layouts -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::layout::entity_edit::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+		
+	<!-- Entities edition wizard layouts -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::layout::entity_wizard_edit::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- Entities view layouts -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::layout::entity_view::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- Entities nested edition layout -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::layout::entity_edit_nested::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- Entities nested view layout -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::layout::entity_view_nested::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- ===== Values ===== -->
+	
+	<!-- Strings -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::values::strings_xml::generate FOR project' />
+		<outlet path='${home-gen}/res/'>
+			<postprocessor class="org.imogene.xpand2.output.QuoteProcessor"/>
+		</outlet>
+	</component>
+	
+	<!-- Arrays -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::values::arrays_xml::generate FOR project' />
+		<outlet path='${home-gen}/res/'>
+			<postprocessor class="org.imogene.xpand2.output.QuoteProcessor"/>
+		</outlet>
+	</component>
+	
+	<!-- ===== Xml -->
+	
+	<!-- General settings -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::xml::general_settings::generate(${Android_multilogin}) FOR project' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- Project Filter Preference screen -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::xml::project_filter_preference_screen::generate("${WEBSERVICE}") FOR project' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- Entity filter preference screen -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::xml::entity_filter_preference_screen::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- Hidden settings -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::xml::hidden_settings::generate(${Android_multilogin}, "${Android_sntpServer}") FOR project' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- More menu for view -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::resources::menu::entity_view_menu::generate FOREACH project.entities' />
+		<outlet path='${home-gen}/res/' />
+	</component>
+	
+	<!-- ********************************************* -->
+	<!-- ******** Android Configuration File ********* -->
+	<!-- ********************************************* -->
+	<!-- Manifest -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::config::manifest_xml::generate("${Android_versionCode}", "${Android_versionName}", ${Android_debuggable}, "${Android_codeHidden}") FOR project' />
+		<outlet path='${home-gen}' />
+	</component>
+	
+	<!-- ********************************************* -->
+	<!-- ************ Android Java Project ***********-->
+	<!-- ********************************************* -->
+
+	<!-- ===== App: Activities ===== -->
+	
+	<!-- Main activity -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::project_app::generate(${Android_multilogin}) FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Thema listing -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::thema_listing::generate(${Android_multilogin}) FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Entities listing -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::entity_list::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Entities listing and map -->
+	<!--
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::entity_list_and_map::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	-->
+	
+	<!-- Entities editors -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::entity_edit::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Entities wizard editors -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::entity_edit_wizard::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+
+	<!-- Entities nested editors -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::view::entity_edit_nested::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Entities viewers -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::entity_view::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+
+	<!-- Entities nested viewers -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::view::entity_view_nested::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- User listing -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::user_listing::generate FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- project filter preference screen -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::project_filter_preference_screen::generate FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- entity filter preference screen -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::app::entity_filter_preference_screen::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- ===== Access Policy ===== -->
+	<!-- Access Policy for the project -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::security::access_policy::generate FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- ===== Provider ===== -->
+
+	<!-- Project content provider -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::provider::project_provider::generate FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- ===== Database ===== -->
+	
+	<!-- sqlite: Project cursors for each entities -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::database::sqlite::entity_cursor::generate(project.name) FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- sqlite: OpenHelper -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::database::sqlite::project_open_helper::generate FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- ===== Entities ===== -->
+	
+	<!-- Project entities classes -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::domain::entity_java::generate(project.name, "${modelName}") FOREACH project.entities' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Localized text -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::domain::localized_text::generate(project.name) FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+	<!-- Entities helper -->
+	<component class="org.eclipse.xpand2.Generator">
+		<fileEncoding value="UTF-8"/>
+		<metaModel class="org.eclipse.xtend.typesystem.emf.EmfMetaModel">
+			<metaModelFile value="${imogeneMetaModel}" />
+		</metaModel>
+		<expand value='android::template::project::domain::project_entity_helper::generate FOR project' />
+		<outlet path='${home-gen}/src_gen/org/imogene/android/'>
+			<postprocessor class="org.eclipse.xpand2.output.JavaBeautifier"/>
+		</outlet>
+	</component>
+	
+</workflow>

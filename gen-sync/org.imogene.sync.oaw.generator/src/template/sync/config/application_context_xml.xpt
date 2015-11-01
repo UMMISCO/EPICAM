@@ -1,0 +1,136 @@
+«IMPORT core»
+«EXTENSION template::CommonEntityUtilExt» 
+
+«DEFINE generate(String projectName) FOR Project-»
+«FILE "application-context.xml"-»
+<?xml version="1.0" encoding="iso-8859-1"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xsi:schemaLocation="
+     http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- Annotations Scan -->
+    <context:annotation-config/>
+
+	<!-- Entity helper -->
+	<bean id="entityHelper" class="org.imogene.«projectName.toLowerCase()».domain.entity.EntityHelperImpl"/>
+
+	<!--  Initialize the DataHandler Manager -->	
+	<bean id="dataHandlerManager" class="org.imogene.«projectName.toLowerCase()».handler.DataHandlerManagerImpl"/>
+
+	<!-- Entity Handlers -->
+	<bean id="defaultUserHandler" class="org.imogene.lib.sync.handler.DefaultUserHandlerImpl" >
+		<property name="dao" ref="defaultUserDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="binaryHandler" class="org.imogene.lib.sync.binary.file.BinaryFileHandlerImpl" >
+		<property name="binaryFileDao" ref="binaryDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="clientFilterHandler" class="org.imogene.lib.sync.clientfilter.ClientFilterHandlerImpl">
+		<property name="dao" ref="clientFilterDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="dynamicFieldInstanceHandler" class="org.imogene.lib.sync.dynamicfields.DynamicFieldInstanceHandlerImpl">
+		<property name="dao" ref="dynamicFieldInstanceDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="dynamicFieldTemplateHandler" class="org.imogene.lib.sync.dynamicfields.DynamicFieldTemplateHandlerImpl">
+		<property name="dao" ref="dynamicFieldTemplateDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+
+	<bean id="profileHandler" class="org.imogene.lib.sync.handler.ProfileHandlerImpl" >
+		<property name="dao" ref="profileDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="entityProfileHandler" class="org.imogene.lib.sync.handler.EntityProfileHandlerImpl" >
+		<property name="dao" ref="entityProfileDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+
+	<bean id="fieldGroupProfileHandler" class="org.imogene.lib.sync.handler.FieldGroupProfileHandlerImpl" >
+		<property name="dao" ref="fieldGroupProfileDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="cardEntityHandler" class="org.imogene.lib.sync.handler.CardEntityHandlerImpl" >
+		<property name="dao" ref="cardEntityDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	
+	<bean id="fieldGroupHandler" class="org.imogene.lib.sync.handler.FieldGroupHandlerImpl" >
+		<property name="dao" ref="fieldGroupDao"/>
+		<property name="filter" ref="beanFilter" />
+	</bean>
+    
+    «FOREACH entities AS e»
+	<bean id="«e.name.toFirstLower()»Handler" class="org.imogene.«projectName.toLowerCase()».handler.«e.name.toFirstUpper()»HandlerImpl" >
+		<property name="filter" ref="beanFilter" />
+	</bean>
+	«ENDFOREACH»
+
+	<!-- Video converter -->
+	<bean name="videoConverter" class="org.imogene.lib.media.VideoConverter">
+		<property name="commandLine" value="${converter.video}" />
+	</bean>
+
+	<!-- Audio converter -->
+	<bean name="audioConverter" class="org.imogene.lib.media.AudioConverter">
+		<property name="commandLine" value="${converter.video}" />
+	</bean>
+
+	<!-- Photo converter -->
+	<bean name="photoConverter" class="org.imogene.lib.media.PhotoConverter" />
+
+	<bean id="binaryOperation" class="org.imogene.lib.media.BinaryOperation">
+		<property name="audioConverter" ref="audioConverter" />
+		<property name="videoConverter" ref="videoConverter" />
+		<property name="photoConverter" ref="photoConverter" />
+	</bean>
+	
+	<!-- Synchronization server -->
+	<bean id="syncServer" class="org.imogene.lib.sync.server.OptimizedSyncServerImpl">
+		<property name="dataHandlerManager" ref="dataHandlerManager"/>
+		<property name="serializer" ref="xmlSerializer"/>
+		<property name="genericDao" ref="genericDao"/>
+		<property name="historyDao" ref="syncHistoryDao"/>
+		<property name="sessionDao" ref="syncSessionDao"/>
+		<property name="entityHelper" ref="entityHelper"/>
+	</bean>
+	
+	<!--  the synchronization controller -->
+	<bean id="syncController" class="org.imogene.lib.sync.server.http.OptimizedSyncController">
+		<property name="methodNameResolver">
+			<bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+				<property name="paramName" value="cmd"/>
+			</bean>
+		</property>
+		<property name="syncServer" ref="syncServer"/>	
+	</bean>
+	
+  	<!--  Spring-security -->	
+	<bean id="imogSecurityDetailService" class="org.imogene.sync.security.SecurityDetailService" />
+	
+	<!-- Access policy factory -->
+	<bean id="accessPolicyFactory" class="org.imogene.«projectName.toLowerCase()».security.AccessPolicyFactoryImpl" />
+	
+	<!-- User Access control -->
+	<bean id="userAccessControl" class="org.imogene.«projectName.toLowerCase()».security.UserAccessControlImpl" />
+
+	<!-- Imog Bean Filter -->
+	<bean id="beanFilter" class="org.imogene.«projectName.toLowerCase()».security.ImogBeanFilterImpl" />
+
+</beans>
+«ENDFILE»
+«ENDDEFINE»
+«REM» ------------------------------------------------«ENDREM»

@@ -1,0 +1,916 @@
+«IMPORT core»
+«EXTENSION template::CommonEntityUtilExt» 
+«DEFINE generate(String packageName, String projectName, String applicationType) FOR Project»
+«FILE projectName.toLowerCase()+"/client/ui/panel/HomePanel.java"»
+package org.imogene.«projectName.toLowerCase()».client.ui.panel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.imogene.admin.client.AdminIconConstants;
+import org.imogene.admin.client.event.create.CreateCardEntityEvent;
+import org.imogene.admin.client.event.create.CreateFieldGroupEvent;
+import org.imogene.admin.client.event.create.CreateNotificationEvent;
+import org.imogene.admin.client.event.create.CreateProfileEvent;
+import org.imogene.admin.client.event.list.ListCardEntityEvent;
+import org.imogene.admin.client.event.list.ListFieldGroupEvent;
+import org.imogene.admin.client.event.list.ListNotificationEvent;
+import org.imogene.admin.client.event.list.ListProfileEvent;
+import org.imogene.admin.client.i18n.AdminNLS;
+import org.imogene.web.client.dynamicfields.i18n.DynFieldsNLS;
+import org.imogene.web.client.event.CreateDynamicFieldTemplateEvent;
+import org.imogene.web.client.event.GoHomeEvent;
+import org.imogene.web.client.event.ListDynamicFieldTemplateEvent;
+import org.imogene.web.client.i18n.BaseNLS;
+import org.imogene.web.client.ui.field.group.FieldGroupPanel;
+import org.imogene.web.client.ui.panel.EntityPanel;
+import org.imogene.web.client.util.ProfileUtil;
+import org.imogene.web.client.util.LocalSession;
+import org.imogene.web.client.util.TokenHelper;
+import org.imogene.web.client.util.TokenHelper.EntityToken;
+import org.imogene.epicam.client.ui.panel.SmsPanel;
+import org.imogene.epicam.client.ui.panel.RapportPanel;
+import org.imogene.epicam.client.event.view.ViewEpicamMapEvent;
+import org.imogene.«projectName.toLowerCase()».client.AccessManager;
+import org.imogene.«projectName.toLowerCase()».client.«projectName.toFirstUpper()»IconConstants;
+import org.imogene.«projectName.toLowerCase()».client.i18n.NLS;
+import org.imogene.«projectName.toLowerCase()».client.event.create.*;
+import org.imogene.«projectName.toLowerCase()».client.event.list.*;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.event.shared.HandlerRegistration;
+
+/**
+ * Home panel of the application
+ * @author Medes-IMPS
+ */
+public class HomePanel extends Composite {
+
+	private static int PATIENT_HLK = 0;
+	private static int EXAM_HLK = 1;
+	private static int MAP_HLK = 2;
+	private static int ACMS_HLK = 3;
+	private static int FORMATION_HLK = 4;
+	private static int STOCK_HLK = 5;
+	private static int ADMINISTRATION_HLK = 6;
+	private static int MEDICAMENTS_HLK = 7;
+	private static int RESRCHUM_HLK = 8;
+	private static int HELP_HLK = 9;
+
+	interface Binder extends UiBinder<Widget, HomePanel> {
+	}
+
+	private static final Binder BINDER = GWT.create(Binder.class);
+	private List<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
+
+	private EventBus eventBus;
+
+	@UiField
+	StackPanel stackPanel;
+	@UiField
+	ScrollPanel scrollPanel;
+	
+	/* thema  Help */
+	@UiField(provided = true)
+	FieldGroupPanel temaHelp;
+	@UiField(provided = true)
+	HTML helpMessage;
+	
+«IF applicationType == "admin"-»
+	/* thema  Users */
+	@UiField(provided = true)
+	FieldGroupPanel temaUsers;
+	«FOREACH entities AS e-»
+	«IF Actor.isAssignableFrom(e.metaType)-»
+	@UiField(provided = true)
+	EntityPanel «e.name.toFirstLower()»;	
+	«ENDIF-»
+	«ENDFOREACH -»
+
+	/* thema  Administration */
+	@UiField(provided = true)
+	FieldGroupPanel temaAdministration;
+	@UiField(provided = true)
+	EntityPanel notification;
+	@UiField(provided = true)
+	EntityPanel dynamicField_Template;
+	@UiField(provided = true)
+	EntityPanel profile;
+
+	/* thema Model */
+	@UiField(provided = true)
+	FieldGroupPanel temaModel;
+	@UiField(provided = true)
+	EntityPanel cardEntity;
+	@UiField(provided = true)
+	EntityPanel fieldGroup;
+	
+	
+«ELSE-»
+	«IF themas!=null && themas.size>0-»	
+		«FOREACH themas AS t»
+		/* thema  «t.name» */
+		@UiField(provided = true)	
+		FieldGroupPanel tema«t.name.toFirstUpper()»;	
+		«FOREACH t.entities AS e-»
+		«IF e.topLevel-»
+		@UiField(provided = true)
+		EntityPanel «e.name.toFirstLower()»;
+		«ENDIF-»
+		«ENDFOREACH -»
+		
+		«IF t.name.toString().compareTo("ACMS") ==0-»	
+			@UiField(provided = false)
+			SmsPanel envoiSms;
+		«ENDIF-»
+		«IF t.name.toString().compareTo("Administration") ==0-»	
+			@UiField(provided = false)
+			RapportPanel rapport;
+		«ENDIF-»
+		
+		«ENDFOREACH»
+	«ELSE-»
+		/* thema  default */
+		@UiField(provided = true)	
+		FieldGroupPanel defaultTema;	
+		«FOREACH entities AS e-»
+		«IF e.topLevel-»
+		@UiField(provided = true)
+		EntityPanel «e.name.toFirstLower()»;
+		«ENDIF-»
+		«ENDFOREACH -»
+	«ENDIF-»
+«ENDIF-»
+	
+	@UiField(provided = true)
+	HTML homeMessage;
+
+	/**
+	 * 
+	 * @param eventBus
+	 */
+	public HomePanel(EventBus eventBus) {
+		
+		this.eventBus = eventBus;
+		
+		homeMessage = new HTML(BaseNLS.messages().homePanel_message());
+		
+		helpMessage = new HTML(BaseNLS.messages().help_content());
+		//Specific help for each component
+//		patientHelp = new HTML(BaseNLS.messages().patient_help());
+//		examHelp = new HTML(BaseNLS.messages().exam_help());
+//		smsHelp = new HTML(BaseNLS.messages().sms_help());
+//		trainingHelp = new HTML(BaseNLS.messages().training_help());
+//		stockHelp = new HTML(BaseNLS.messages().stock_help());
+//		adminHelp = new HTML(BaseNLS.messages().admin_help());
+//		drugAdminHelp = new HTML(BaseNLS.messages().drug_admin_help());
+//		reportHelp = new HTML(BaseNLS.messages().report_help());
+//		userAdminHelp = new HTML(BaseNLS.messages().user_admin_help());
+		
+		
+		
+«IF applicationType == "admin"-»
+		/* thema  Users */
+		temaUsers = new FieldGroupPanel();
+		temaUsers.setGroupTitle(AdminNLS.constants().thema_users());
+		«FOREACH entities AS e-»
+			«IF Actor.isAssignableFrom(e.metaType)-»
+			if («projectName.toFirstUpper()»IconConstants.«e.name.toUpperCase()»_ICON != null)
+				«e.name.toFirstLower()» = new EntityPanel(NLS.constants().«e.name.toFirstLower()»_name(), «projectName.toFirstUpper()»IconConstants.«e.name.toUpperCase()»_ICON);
+			else
+				«e.name.toFirstLower()» = new EntityPanel(NLS.constants().«e.name.toFirstLower()»_name());	
+			«ENDIF-»
+					
+		«ENDFOREACH -»		
+
+		/* thema  Administration */
+		temaAdministration = new FieldGroupPanel();
+		temaAdministration.setGroupTitle(AdminNLS.constants().thema_administration());
+		notification = new EntityPanel(AdminNLS.constants().notification_name(), AdminIconConstants.NOTIFICATION_ICON);
+		dynamicField_Template = new EntityPanel(DynFieldsNLS.constants().dynamicField_Template_name(), AdminIconConstants.DYNAMICFIELD_TEMPLATE_ICON);
+		profile = new EntityPanel(AdminNLS.constants().profile_name());
+
+		/* thema Model */
+		temaModel = new FieldGroupPanel();
+		temaModel.setGroupTitle(AdminNLS.constants().thema_model());
+		cardEntity = new EntityPanel(AdminNLS.constants().cardEntity_name());
+		fieldGroup = new EntityPanel(AdminNLS.constants().fieldGroup_name());
+«ELSE-»
+	«IF themas!=null && themas.size>0-»		
+			«FOREACH themas AS t»
+			/* thema  «t.name» */
+			tema«t.name.toFirstUpper()» = new FieldGroupPanel();
+			tema«t.name.toFirstUpper()».setGroupTitle(NLS.constants().thema_«t.name.toFirstLower()»());
+			«FOREACH t.entities AS e-»
+			«IF e.topLevel-»
+				if(«projectName.toFirstUpper()»IconConstants.«e.name.toUpperCase()»_ICON!=null)		
+					«e.name.toFirstLower()» = new EntityPanel(NLS.constants().«e.name.toFirstLower()»_name(), «projectName.toFirstUpper()»IconConstants.«e.name.toUpperCase()»_ICON);
+				else
+					«e.name.toFirstLower()» = new EntityPanel(NLS.constants().«e.name.toFirstLower()»_name());	
+				«ENDIF-»	
+				
+				«IF e.name.toFirstLower().compareTo("envoiSms") ==0-»	
+					if («projectName.toFirstUpper()»IconConstants.ENVOISMS_ICON != null)
+						envoiSms = new EntityPanel(NLS.constants().envoiSms_name(), ENVOISMS_ICON);
+					else
+						envoiSms = new EntityPanel(NLS.constants().envoiSms_name());
+				«ENDIF-»
+				 
+				«IF e.name.toFirstLower().compareTo("rapport") ==0-»	
+					if («projectName.toFirstUpper()»IconConstants.RAPPORT_ICON != null)
+						rapport = new EntityPanel(NLS.constants().rapport_name(), RAPPORT_ICON);
+					else
+						rapport = new EntityPanel(NLS.constants().rapport_name());
+				«ENDIF-»	
+			«ENDFOREACH -»		
+			«ENDFOREACH -»
+	«ELSE-»
+			defaultTema = new FieldGroupPanel();
+			defaultTema.setGroupTitle(BaseNLS.constants().thema_default());
+			«FOREACH entities AS e-»
+			«IF e.topLevel-»
+			if(«projectName.toFirstUpper()»IconConstants.«e.name.toUpperCase()»_ICON!=null)		
+				«e.name.toFirstLower()» = new EntityPanel(NLS.constants().«e.name.toFirstLower()»_name(), «projectName.toFirstUpper()»IconConstants.«e.name.toUpperCase()»_ICON);
+			else
+				«e.name.toFirstLower()» = new EntityPanel(NLS.constants().«e.name.toFirstLower()»_name());				
+			«ENDIF-»		
+			«ENDFOREACH -»		
+	«ENDIF-»
+«ENDIF-»	
+
+		/* thema  Help */
+		temaHelp = new FieldGroupPanel();
+		temaHelp.setGroupTitle(BaseNLS.messages().thema_Help());
+		initWidget(BINDER.createAndBindUi(this));
+
+		configMenus();
+		setVisibility();
+		
+		int height = Window.getClientHeight();
+		setPanelContentHeight(height - height / 5);
+		«IF applicationType != "admin"-»
+		openStackContent(LocalSession.get().getSelectedHlk());
+		«ENDIF-»
+	}
+	
+	«IF applicationType != "admin"-»
+	/**
+	 * 
+	 * @param selection
+	 */
+	private void openStackContent(int selection) {
+
+		if(selection == EXAM_HLK) {
+			onLinkExamen(null);
+			stackPanel.showStack(0);
+		}
+		else if(selection == MAP_HLK) {
+			onLinkMap(null);
+			stackPanel.showStack(0);
+		}
+		else if(selection == ACMS_HLK) {
+			onLinkAcms(null);
+			stackPanel.showStack(1);
+		}
+		else if(selection == FORMATION_HLK) {
+			onLinkFormation(null);
+			stackPanel.showStack(1);
+		}
+		else if(selection == STOCK_HLK) {
+			onLinkStock(null);
+			stackPanel.showStack(2);
+		}
+		else if(selection == ADMINISTRATION_HLK) {
+			onLinkAdministration(null);
+			stackPanel.showStack(3);
+		}
+		else if(selection == MEDICAMENTS_HLK) {
+			onLinkAdministrationMedicament(null);
+			stackPanel.showStack(3);
+		}
+		else if(selection == RESRCHUM_HLK) {
+			onLinkResourcesHumaines(null);
+			stackPanel.showStack(3);
+		}//Show help stack
+		else if (selection == HELP_HLK) {
+			onLinkHelp(null);
+			stackPanel.showStack(9);
+		} 
+		else {
+			onLinkPatient(null);
+			stackPanel.showStack(0);
+		}	
+	}
+	«ENDIF-»
+
+	/**
+	 * Configures the menu buttons
+	 */
+	private void configMenus() {
+
+«IF applicationType == "admin"-»
+	«FOREACH entities AS e-»
+	«IF Actor.isAssignableFrom(e.metaType)-»
+	«EXPAND setActions FOR e-»	
+	«ENDIF-»
+	«ENDFOREACH -»
+
+		/* Notification Menu */
+
+		if (ProfileUtil.isAdmin()) {
+			notification.setCreateClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					History.newItem(TokenHelper.TK_NEW + "/notification/", true);
+				}
+			});
+			notification.setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/notification/", true);
+				}
+			});
+			notification.setSearchClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					String searchValue = notification.getSearchValue();
+					if (searchValue != null && !searchValue.isEmpty())
+						History.newItem(TokenHelper.TK_LIST + "/notification/searchValue", true);
+				}
+			});
+		} else {
+			notification.setCreateClickHandler(null);
+			notification.setListClickHandler(null);
+			notification.setSearchClickHandler(null);
+		}
+
+		/* DynamicFieldTemplate Menu */
+
+		if (ProfileUtil.isAdmin()) {
+			dynamicField_Template.setCreateClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					History.newItem(TokenHelper.TK_NEW + "/dynamicfieldtemplate/", true);
+				}
+			});
+			dynamicField_Template.setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/dynamicfieldtemplate/", true);
+				}
+			});
+			dynamicField_Template.setSearchClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					String searchValue = dynamicField_Template.getSearchValue();
+					if (searchValue != null && !searchValue.isEmpty())
+						History.newItem(TokenHelper.TK_LIST + "/dynamicfieldtemplate/searchValue", true);
+				}
+			});
+		} else {
+			dynamicField_Template.setCreateClickHandler(null);
+			dynamicField_Template.setListClickHandler(null);
+			dynamicField_Template.setSearchClickHandler(null);
+		}
+
+		/* FieldGroup Menu */
+
+		if (ProfileUtil.isAdmin()) {
+			fieldGroup.setCreateClickHandler(null);
+
+			fieldGroup.setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/fieldgroup/", true);
+				}
+			});
+			fieldGroup.setSearchClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					String searchValue = fieldGroup.getSearchValue();
+					if (searchValue != null && !searchValue.isEmpty())
+						History.newItem(TokenHelper.TK_LIST + "/fieldgroup/searchValue", true);
+				}
+			});
+		} else {
+			fieldGroup.setCreateClickHandler(null);
+			fieldGroup.setListClickHandler(null);
+			fieldGroup.setSearchClickHandler(null);
+		}
+
+		/* Profile Menu */
+
+		if (ProfileUtil.isAdmin()) {
+			profile.setCreateClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					History.newItem(TokenHelper.TK_NEW + "/profile/", true);
+				}
+			});
+			profile.setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/profile/", true);
+				}
+			});
+			profile.setSearchClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					String searchValue = profile.getSearchValue();
+					if (searchValue != null && !searchValue.isEmpty())
+						History.newItem(TokenHelper.TK_LIST + "/profile/searchValue", true);
+				}
+			});
+		} else {
+			profile.setCreateClickHandler(null);
+			profile.setListClickHandler(null);
+			profile.setSearchClickHandler(null);
+		}
+
+		/* CardEntity Menu */
+
+		if (ProfileUtil.isAdmin()) {
+			cardEntity.setCreateClickHandler(null);
+			cardEntity.setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/cardentity/", true);
+				}
+			});
+			cardEntity.setSearchClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					String searchValue = cardEntity.getSearchValue();
+					if (searchValue != null && !searchValue.isEmpty())
+						History.newItem(TokenHelper.TK_LIST + "/cardentity/searchValue", true);
+				}
+			});
+		} else {
+			cardEntity.setCreateClickHandler(null);
+			cardEntity.setListClickHandler(null);
+			cardEntity.setSearchClickHandler(null);
+		}
+		
+«ELSE-»
+		/* rapport menu */
+		if (AccessManager.canCreateRapport()) {
+			rapport.setCreateClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					History.newItem(TokenHelper.TK_NEW + "/rapport/", true);
+				}
+			});
+		} else
+			rapport.setCreateClickHandler(null);
+
+		/* EnvoiSMS menu */
+		if (AccessManager.canCreateEnvoiSMS()) {
+			envoiSms.setCreateClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					History.newItem(TokenHelper.TK_NEW + "/envoiSms/", true);
+				}
+			});
+		} else {
+			envoiSms.setCreateClickHandler(null);
+		}
+
+		if (AccessManager.canCreateEnvoiSMS()) {
+			envoiSms.setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/outbox/", true);
+				}
+			});
+		} else {
+			envoiSms.setListClickHandler(null);
+		}
+	«IF themas!=null && themas.size>0-»	
+		«EXPAND setActions FOREACH themas.entities-»
+	«ELSE-»
+		«EXPAND setActions FOREACH entities-»
+	«ENDIF-»	
+«ENDIF-»
+		
+	}
+	
+	/**
+	 * Set the menu visibility
+	 */
+	private void setVisibility() {
+	
+«IF applicationType == "admin"-»
+		/* thema  Users */
+		boolean showUsersTema = false;
+		«FOREACH entities AS e-»
+		«IF Actor.isAssignableFrom(e.metaType)-»
+			«IF e.topLevel-»
+			if(!AccessManager.canDirectAccess«e.name.toFirstUpper()»() || !AccessManager.canRead«e.name.toFirstUpper()»())
+				«e.name.toFirstLower()».setVisible(false);
+			else
+				showUsersTema = true;
+			«ENDIF-»
+		«ENDIF-»
+		«ENDFOREACH -»
+		if (!showUsersTema)
+			temaUsers.setVisible(false);
+
+		/* thema  Administration */
+		temaAdministration.setVisible(true);
+		«IF hasNotifications(entities)-»
+		if (!ProfileUtil.isAdmin())
+			notification.setVisible(false);
+		«ELSE-»
+		/* no notification defined in model, panel hidden */	
+		notification.setVisible(false);
+		«ENDIF-»
+			
+		«IF hasDynamicFields(entities)-»
+		if (!ProfileUtil.isAdmin())
+			dynamicField_Template.setVisible(false);
+		«ELSE-»
+		/* no dynamic field defined in model, panel hidden */
+		dynamicField_Template.setVisible(false);
+		«ENDIF-»
+
+		profile.setVisible(true);
+
+		/* thema Model */
+		cardEntity.setVisible(true);
+		fieldGroup.setVisible(true);
+		temaModel.setVisible(true);
+«ELSE-»
+	«IF themas!=null && themas.size>0-»
+		«FOREACH themas AS t»
+		/* thema  «t.name» */
+		boolean show«t.name.toFirstUpper()»Tema = false;
+		«FOREACH t.entities AS e-»
+		«IF e.topLevel-»
+		if(!AccessManager.canDirectAccess«e.name.toFirstUpper()»() || !AccessManager.canRead«e.name.toFirstUpper()»())
+			«e.name.toFirstLower()».setVisible(false);
+		else
+			show«t.name.toFirstUpper()»Tema = true;
+		«ENDIF-»
+		«ENDFOREACH -»
+		if(!show«t.name.toFirstUpper()»Tema)
+			tema«t.name.toFirstUpper()».setVisible(false);
+		«ENDFOREACH -»	
+	«ELSE-»
+		«FOREACH entities AS e-»
+		«IF e.topLevel-»
+		if(!AccessManager.canDirectAccess«e.name.toFirstUpper()»() || !AccessManager.canRead«e.name.toFirstUpper()»())
+			«e.name.toFirstLower()».setVisible(false);
+		«ENDIF-»
+		«ENDFOREACH -»
+	«ENDIF-»
+«ENDIF-»
+
+	}
+
+	/**
+	 * Sets the height of the panel that contents the entity menus
+	 * @param height
+	 */	
+	public void setPanelContentHeight(int height) {
+		scrollPanel.getElement().getStyle().clearHeight();
+		scrollPanel.getElement().getStyle().setProperty("height", height + "px");
+	}
+	
+	/**
+	 * 
+	 */
+	private void setWindowHandler() {
+		registrations.add(Window.addResizeHandler(new ResizeHandler() {
+			@Override
+			public void onResize(ResizeEvent arg0) {
+				int height = Window.getClientHeight();
+				setPanelContentHeight(height - height / 5);
+			}			
+		}));
+	}
+
+	@Override
+	protected void onLoad() {
+		setWindowHandler();
+		super.onLoad();
+	}
+	
+	@Override
+	protected void onUnload() {
+		for (HandlerRegistration r : registrations)
+			r.removeHandler();
+		registrations.clear();
+		super.onUnload();
+	}
+	
+	«IF applicationType != "admin"-»
+	@UiHandler("linkPatient")
+	public void onLinkPatient(ClickEvent event) {
+		temaMalade.setVisible(true);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		temaHelp.setvi
+		//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().patient_help()));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(PATIENT_HLK);
+	}
+
+	@UiHandler("linkExamen")
+	public void onLinkExamen(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(true);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().exam_help()));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(EXAM_HLK);
+	}
+
+	@UiHandler("linkAcms")
+	public void onLinkAcms(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(true);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(BaseNLS.messages().help_content()));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().sms_help()));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(ACMS_HLK);
+	}
+
+	@UiHandler("linkFormation")
+	public void onLinkFormation(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(true);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().training_help()));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(FORMATION_HLK);
+	}
+
+	@UiHandler("linkStock")
+	public void onLinkStock(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(true);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().stock_help()));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(STOCK_HLK);
+	}
+
+	@UiHandler("linkAdministration")
+	public void onLinkAdministration(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(true);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().admin_help()));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(ADMINISTRATION_HLK);
+	}
+
+	@UiHandler("linkAdministrationMedicament")
+	public void onLinkAdministrationMedicament(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(true);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().drug_admin_help()));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(MEDICAMENTS_HLK);
+	}
+
+	@UiHandler("linkResourcesHumaines")
+	public void onLinkResourcesHumaines(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(true);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(false);
+		//Set help
+//		helpMessage.setHTML((SafeHtml) new HTML(""));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(BaseNLS.messages().report_help()));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(RESRCHUM_HLK);
+	}
+
+	@UiHandler("linkMap")
+	public void onLinkMap(ClickEvent event) {
+		eventBus.fireEvent(new ViewEpicamMapEvent());
+		LocalSession.get().setSelectedHlk(MAP_HLK);
+	}
+	@UiHandler("linkHelp")
+	public void onLinkHelp(ClickEvent event) {
+		temaMalade.setVisible(false);
+		temaACMS.setVisible(false);
+		temaAdministration.setVisible(false);
+		temaAdministrationMedicament.setVisible(false);
+		temaExamens.setVisible(false);
+		temaFormationContinue.setVisible(false);
+		temaRH.setVisible(false);
+		temaStock.setVisible(false);
+		temaHelp.setVisible(true);
+		//Set help
+//		homeMessage = new HTML(BaseNLS.messages().homePanel_message());
+//		helpMessage.setHTML((SafeHtml) new HTML(BaseNLS.messages().help_content()));
+//		homeMessage.setHTML((SafeHtml) new HTML(""));
+//		patientHelp.setHTML((SafeHtml) new HTML(""));
+//		examHelp.setHTML((SafeHtml) new HTML(""));
+//		smsHelp.setHTML((SafeHtml) new HTML(""));
+//		trainingHelp.setHTML((SafeHtml) new HTML(""));
+//		stockHelp.setHTML((SafeHtml) new HTML(""));
+//		adminHelp.setHTML((SafeHtml) new HTML(""));
+//		drugAdminHelp.setHTML((SafeHtml) new HTML(""));
+//		reportHelp.setHTML((SafeHtml) new HTML(""));
+//		userAdminHelp.setHTML((SafeHtml) new HTML(""));
+		LocalSession.get().setSelectedHlk(HELP_HLK);
+		
+	}
+	
+	«ENDIF-»
+
+}
+«ENDFILE-»
+«ENDDEFINE»
+
+
+«DEFINE setActions FOR CardEntity-»
+		«IF topLevel-»
+		/* «name.toFirstUpper()» Menu */
+		
+		if (AccessManager.canCreate«name.toFirstUpper()»() && AccessManager.canEdit«name.toFirstUpper()»()) {		
+			«name.toFirstLower()».setCreateClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					History.newItem(TokenHelper.TK_NEW + "/«name.toLowerCase()»/", true);
+				}
+			});
+		}
+		else
+			«name.toFirstLower()».setCreateClickHandler(null);
+						
+		if (AccessManager.canDirectAccess«name.toFirstUpper()»() && AccessManager.canRead«name.toFirstUpper()»()) {						
+			«name.toFirstLower()».setListClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					LocalSession.get().setSearchCriterions(null, null);
+					History.newItem(TokenHelper.TK_LIST + "/«name.toLowerCase()»/", true);
+				}
+			});
+			«name.toFirstLower()».setSearchClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent event) {
+					String searchValue = «name.toFirstLower()».getSearchValue();
+					if(searchValue!=null && !searchValue.isEmpty())
+						History.newItem(TokenHelper.TK_LIST + "/«name.toLowerCase()»/" + searchValue, true);
+				}
+			});	
+		}
+		else {
+			«name.toFirstLower()».setListClickHandler(null);
+			«name.toFirstLower()».setSearchClickHandler(null);
+		}
+		«ENDIF-»
+
+«ENDDEFINE»
+

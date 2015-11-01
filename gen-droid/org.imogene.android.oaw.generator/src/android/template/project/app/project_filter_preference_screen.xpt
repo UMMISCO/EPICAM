@@ -1,0 +1,55 @@
+«IMPORT core»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+«DEFINE generate FOR Project »
+«IF hasFilter(this)»
+«FILE "/" + name.toLowerCase() + "/app/FilterPreferenceScreen.java"-»
+package org.imogene.android.«name.toLowerCase()».app;
+
+import android.os.Bundle;
+
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
+
+import org.imogene.android.«name.toLowerCase()».R;
+import org.imogene.android.«name.toLowerCase()».security.AccessPolicy;
+
+public class FilterPreferenceScreen extends SherlockPreferenceActivity {
+
+	private AccessPolicy mPolicy;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.filter_preference_screen);
+		
+		mPolicy = AccessPolicy.getPolicy(this);
+		
+		«FOREACH entities AS e-»
+		«IF hasFilter(e)-»
+		findPreference("«e.name.toLowerCase()»_filters").setEnabled(isPreferenceScreen«e.name.toFirstUpper()»FilterEnabled());
+		«ENDIF-»		
+		«ENDFOREACH-»
+	}
+	
+	«FOREACH entities AS e-»
+	«IF hasFilter(e)-»
+	private boolean isPreferenceScreen«e.name.toFirstUpper()»FilterEnabled() {
+		if (mPolicy.canRead«e.name.toFirstUpper()»()) {
+			«IF e.clientPeriodFilterable-»
+			return true;
+			«ELSE-»
+			«FOREACH getFilteredGroups(e.clientFilterFields) AS g-»
+			if (mPolicy.canRead«e.name.toFirstUpper()»«g.name.toFirstUpper()»()) {
+				return true;
+			}
+			«ENDFOREACH-»
+			«ENDIF-»
+		}
+		return false;
+	}
+	«ENDIF-»
+	«ENDFOREACH-»
+	
+}
+«ENDFILE»
+«ENDIF»
+«ENDDEFINE»

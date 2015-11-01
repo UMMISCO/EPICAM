@@ -1,0 +1,349 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt» 
+«DEFINE generate(String projectName, String application) FOR CardEntity»
+«FILE projectName.toLowerCase()+"/domain/dao/"+this.name.toFirstUpper() + "DaoImpl.java"»
+package org.imogene.«projectName.toLowerCase()».domain.dao;
+
+import java.util.List;
+import java.util.Vector;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.imogene.lib.common.criteria.DaoUtil;
+import org.imogene.lib.common.criteria.ImogJunction;
+import org.imogene.lib.common.dao.«IF Actor.isAssignableFrom(this.metaType)»ImogActorDaoImpl«ELSE»ImogBeanDaoImpl«ENDIF»;
+import org.imogene.lib.common.entity.ImogActor;
+«IF application == "sync.server"-»
+import org.imogene.lib.sync.server.util.HttpSessionUtil;
+«ELSE-»
+import org.imogene.epicam.server.ImogActorUtils;
+import org.imogene.web.server.util.HttpSessionUtil;
+«ENDIF-»
+import org.imogene.«projectName.toLowerCase()».domain.entity.*;
+/**
+ * Manage persistence for «name.toFirstUpper()»
+ */
+public class «name.toFirstUpper()»DaoImpl extends «IF Actor.isAssignableFrom(this.metaType)»ImogActorDaoImpl<«name.toFirstUpper()»>«ELSE»ImogBeanDaoImpl<«name.toFirstUpper()»>«ENDIF» implements «name.toFirstUpper()»Dao {
+
+	protected «name.toFirstUpper()»DaoImpl() {
+		super(«name.toFirstUpper()».class);
+	}
+	
+	@Override
+	public void delete() {
+		//TODO
+	}
+	
+	/* relation dependencies */
+	«EXPAND methodsForRelation FOREACH groups.fields-»
+	
+	«IF name == "Patient"-»
+	@Override
+	public Long countPatientFilteredByCdt(ImogJunction criterion, String cdtId) {
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<Patient> root = query.from(Patient.class);
+		query.select(builder.count(root));
+		Path<Object> join = root.join("centres", JoinType.LEFT).get("id");
+		query.where(builder.equal(join, cdtId), DaoUtil.<Patient> toPredicate(criterion, builder, root));
+		return em.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public List<Patient> listPatientFilteredByCdt(int first, int max, String property, boolean asc, ImogJunction criterion, String cdtId) {
+		
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+		CriteriaQuery<Patient> query = builder.createQuery(clazz);
+		Root<Patient> root = query.from(Patient.class);
+		query.select(root);
+		Path<Object> join = root.join("centres", JoinType.LEFT).get("id");
+		query.where(builder.equal(join, cdtId), DaoUtil.<Patient> toPredicate(criterion, builder, root));
+		if (property == null) {
+			property = "modified";
+		}
+		Order o = asc ? builder.asc(DaoUtil.getCascadeRoot(root, property)) : builder.desc(DaoUtil.getCascadeRoot(root,	property));
+		query.orderBy(o, builder.desc(root.<String> get("id")));
+		return em.createQuery(query).setFirstResult(first).setMaxResults(max).getResultList();
+	}				
+	«ENDIF-»
+	
+	
+	
+	«IF name == "Patient"-»
+	@Override
+	protected Predicate getFilter(Root<Patient> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("centres", JoinType.LEFT), "region.id");				
+				 return builder.equal(join, personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("centres", JoinType.LEFT), "districtSante.id");
+				return builder.equal(join, personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				Path<?> join = root.join("centres", JoinType.LEFT).get("id");
+				return builder.equal(join, personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "CasTuberculose" || name == "CasIndex" -»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("patient").join("centres", JoinType.LEFT), "region.id");
+				return builder.equal(join, personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("patient").join("centres", JoinType.LEFT), "districtSante.id");
+				return builder.equal(join, personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				Path<?> join = root.join("patient").join("centres", JoinType.LEFT).get("id");
+				return builder.equal(join, personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "ExamenMicroscopie" || name == "ExamenATB" || name == "RendezVous"-»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("casTb").join("patient").join("centres", JoinType.LEFT), "region.id");
+				return builder.equal(join, personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("casTb").join("patient").join("centres", JoinType.LEFT), "districtSante.id");
+				return builder.equal(join, personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				Path<?> join = root.join("casTb").join("patient").join("centres", JoinType.LEFT).get("id");
+				return builder.equal(join, personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "ExamenBiologique" || name == "ExamenSerologie" || name == "OutBox"-»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("patient").join("centres", JoinType.LEFT), "region.id");
+				return builder.equal(join, personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(root.join("patient").join("centres", JoinType.LEFT), "districtSante.id");
+				return builder.equal(join, personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				Path<?> join = root.join("patient").join("centres", JoinType.LEFT).get("id");
+				return builder.equal(join, personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "PriseMedicamenteuse"-»
+	@Override
+	protected Predicate getFilter(Root<PriseMedicamenteuse> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(
+						root.join("phaseIntensive", JoinType.LEFT).join("patient", JoinType.LEFT)
+								.join("centres", JoinType.LEFT), "region.id");
+				Path<?> join2 = DaoUtil.getCascadeRoot(
+						root.join("phaseContinuation", JoinType.LEFT).join("patient", JoinType.LEFT)
+								.join("centres", JoinType.LEFT), "region.id");
+				return builder.or(builder.equal(join, personnel.getRegion().getId()),
+						builder.equal(join2, personnel.getRegion().getId()));
+			} else if ("2".equals(niveau)) {
+				Path<?> join = DaoUtil.getCascadeRoot(
+						root.join("phaseIntensive", JoinType.LEFT).join("patient", JoinType.LEFT)
+								.join("centres", JoinType.LEFT), "districtSante.id");
+				Path<?> join2 = DaoUtil.getCascadeRoot(
+						root.join("phaseContinuation", JoinType.LEFT).join("patient", JoinType.LEFT)
+								.join("centres", JoinType.LEFT), "districtSante.id");
+				return builder.or(builder.equal(join, personnel.getDistrictSante().getId()),
+						builder.equal(join2, personnel.getDistrictSante().getId()));
+			} else if ("3".equals(niveau)) {
+				Path<?> join = root.join("phaseIntensive", JoinType.LEFT).join("patient", JoinType.LEFT)
+						.join("centres", JoinType.LEFT).get("id");
+				Path<?> join2 = root.join("phaseContinuation", JoinType.LEFT).join("patient", JoinType.LEFT)
+						.join("centres", JoinType.LEFT).get("id");
+				return builder.or(builder.equal(join, personnel.getCDT().getId()),
+						builder.equal(join2, personnel.getCDT().getId()));
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "Lot" || name == "Commande" || name == "Inventaire" || name == "Reception" || name == "CandidatureFormation"-»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "region.id"), personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "districtSante.id"), personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "CDT.id"), personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "DetailCommandeIntrant" || name == "DetailCommandeMedicament" || name == "DetailReceptionIntrant" || name == "DetailReceptionMedicament"-»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "commande.region.id"), personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "commande.districtSante.id"), personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "commande.CDT.id"), personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "DetailInventaire" || name == "EntreeLot" || name == "SortieLot" || name == "HorsUsage"-»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "lot.region.id"), personnel.getRegion().getId());
+			} else if ("2".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "lot.districtSante.id"), personnel.getDistrictSante().getId());
+			} else if ("3".equals(niveau)) {
+				return builder.equal(DaoUtil.getCascadeRoot(root, "lot.CDT.id"), personnel.getCDT().getId());
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "Ravitaillement" || name == "TransfertReference"-»
+	@Override
+	protected Predicate getFilter(Root<«name.toFirstUpper()»> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				return builder.or(
+						builder.equal(DaoUtil.getCascadeRoot(root, "region.id"), personnel.getRegion().getId()),
+						builder.equal(DaoUtil.getCascadeRoot(root, "regionArrivee.id"), personnel.getRegion().getId()));
+			} else if ("2".equals(niveau)) {
+				return builder.or(
+						builder.equal(DaoUtil.getCascadeRoot(root, "districtSante.id"), personnel.getDistrictSante().getId()),
+						builder.equal(DaoUtil.getCascadeRoot(root, "districtSanteArrivee.id"), personnel.getDistrictSante().getId()));
+			} else if ("3".equals(niveau)) {
+				return builder.or(
+						builder.equal(DaoUtil.getCascadeRoot(root, "CDTDepart.id"), personnel.getCDT().getId()),
+						builder.equal(DaoUtil.getCascadeRoot(root, "CDTArrivee.id"), personnel.getCDT().getId()));
+			}
+		}
+		return null;
+	}
+	«ELSEIF name == "DetailRavitaillement"»
+	@Override
+	protected Predicate getFilter(Root<DetailRavitaillement> root, CriteriaBuilder builder) {
+		«EXPAND initActor FOR application-»
+		if (actor instanceof Personnel) {
+			Personnel personnel = (Personnel) actor;
+			String niveau = personnel.getNiveau();
+			if ("1".equals(niveau)) {
+				return builder.or(
+						builder.equal(DaoUtil.getCascadeRoot(root, "ravitaillement.region.id"), personnel.getRegion().getId()),
+						builder.equal(DaoUtil.getCascadeRoot(root, "ravitaillement.regionArrivee.id"), personnel.getRegion().getId()));
+			} else if ("2".equals(niveau)) {
+				return builder.or(
+						builder.equal(DaoUtil.getCascadeRoot(root, "ravitaillement.districtSante.id"), personnel.getDistrictSante().getId()),
+						builder.equal(DaoUtil.getCascadeRoot(root, "ravitaillement.districtSanteArrivee.id"), personnel.getDistrictSante().getId()));
+			} else if ("3".equals(niveau)) {
+				return builder.or(
+						builder.equal(DaoUtil.getCascadeRoot(root, "ravitaillement.CDTDepart.id"), personnel.getCDT().getId()),
+						builder.equal(DaoUtil.getCascadeRoot(root, "ravitaillement.CDTArrivee.id"), personnel.getCDT().getId()));
+			}
+		}
+		return null;
+	}
+	«ENDIF-»
+	
+	
+	
+	
+}
+«ENDFILE»
+«ENDDEFINE»
+
+
+«REM» DAO methods implied by the relation fields «ENDREM»
+«DEFINE methodsForRelation FOR FieldEntity»«ENDDEFINE»
+«DEFINE methodsForRelation FOR RelationFieldEntity»
+«IF cardinality==-1 || cardinality>1»
+«IF getOppositeCardinality(this)==1 »
+/**
+ * List associated «entity.name.toFirstUpper()», 
+ * on the field «name.toFirstLower()»
+ * @param parent the parent entity
+ * @return the list of the associated entities
+ */
+@Override
+public List<«entity.name.toFirstUpper()»> load«name.toFirstUpper()»(«parentGroup.parentCard.name.toFirstUpper()» parent){
+	CriteriaBuilder builder = em.getCriteriaBuilder();
+	CriteriaQuery<«entity.name.toFirstUpper()»> query = builder.createQuery(«entity.name.toFirstUpper()».class);
+	Root<«entity.name.toFirstUpper()»> root = query.from(«entity.name.toFirstUpper()».class);
+	query.select(root);
+	query.where(builder.equal(root.<«parentGroup.parentCard.name.toFirstUpper()»> get("«EXPAND template::CommonFieldUtil::propertyName FOR oppositeRelationField»"), parent));
+	return em.createQuery(query).getResultList();
+}
+«ELSE»
+/**
+ * List associated «entity.name.toFirstUpper()», 
+ * on the field «name.toFirstLower()»
+ * @param parent the parent entity
+ * @return the list of the associated entities
+ */
+@Override
+public List<«entity.name.toFirstUpper()»> load«name.toFirstUpper()»(«parentGroup.parentCard.name.toFirstUpper()» parent){
+		if (parent == null) {
+			return new Vector<«entity.name.toFirstUpper()»>();
+		}
+		return parent.«EXPAND template::CommonFieldUtil::getterName FOR this-»();
+}
+«ENDIF»
+«ENDIF»
+«ENDDEFINE»
+
+
+«DEFINE initActor FOR String-»
+«IF this == "sync.server"-»
+ImogActor actor = HttpSessionUtil.getCurrentUser();
+«ELSE-»
+ImogActor actor = ImogActorUtils.getCurrentActor();
+if (actor == null) {
+	actor = HttpSessionUtil.getCurrentUser();
+}
+«ENDIF-»
+«ENDDEFINE-»

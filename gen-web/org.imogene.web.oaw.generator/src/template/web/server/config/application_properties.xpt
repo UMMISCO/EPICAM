@@ -1,0 +1,50 @@
+«IMPORT core»
+«DEFINE generate(String projectName, String jdbcDriver, String jdbcPath, String jdbcLogin, String jdbcPassword, String hibernateDialect, String notifierUrl, String binariesPath, String videoConverter, String embedded) FOR Project»
+«FILE "application.properties"»
+«IF embedded == "true"-»
+# JDBC properties
+jdbc.driverClassName=org.h2.Driver
+jdbc.url=jdbc:h2:#{systemProperties['imogene.home']}/h2/«name.toLowerCase()»;create=true
+jdbc.username=app
+jdbc.password=app
+hibernate.dialect=org.hibernate.dialect.H2Dialect
+
+# The binary path 
+# WARNING : On windows, please use '/' in place of '\'
+binary.path=#{systemProperties['imogene.home']}/binaries
+
+# NTP job properties
+ntp.host=africa.pool.ntp.org
+ntp.delay=600000
+«ELSE-»
+# JDBC properties
+jdbc.driverClassName=«jdbcDriver»
+jdbc.url=«jdbcPath»
+jdbc.username=«jdbcLogin»
+jdbc.password=«jdbcPassword»
+hibernate.dialect=«hibernateDialect»
+
+# The binary path 
+# WARNING : On windows, please use '/' in place of '\'
+binary.path=«binariesPath»
+
+# Notification properties
+notifier.server=«notifierUrl»
+«ENDIF-»
+
+# The command line used to convert the video file to the flv format.
+# ie : ffmpeg -i %IN% -f flv %OUT%
+# WARNING : On windows, if replace '\' by "/" in your path.
+converter.video=«videoConverter»
+
+# SMS properties
+sms.uri=http://smswebservices.mtarget.fr/SmsWebServices/ServletSms
+sms.username=pnlt
+sms.password=G4SopP3w
+sms.serviceId=18098
+sms.method=sendText
+sms.originatingAddress=00000
+sms.operatorid=0
+sms.paycode=0
+«ENDFILE»
+«ENDDEFINE»

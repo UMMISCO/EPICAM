@@ -1,0 +1,28 @@
+<workflow>
+	
+	<!-- Property definition -->
+	<property name="modelName" value="model" />
+	<property name="genName" value="${projectName}" />
+	<property name="projectName" value="${modelName}" />
+	<property name="modelFullPath" value="model.imog" />	
+	<property name="imogeneMetaModel" value="metamodel/ImogeneModel.ecore"/>
+	<property name="model" value="${modelFullPath}" />
+	<property name="home-gen" value="../WebModel" />
+	<property name="packageName" value="org.imogene"  />
+	<property name="packagePath" value="org/imogene" />	
+	<property name="gkey" value="NO_KEY"/>
+	<property name="gmaps" value="false"/>
+	<property name="JDBCDRIVER" value="driver"/>
+	<property name="JDBCPATH" value="path"/>
+	<property name="JDBCLOGIN" value="login"/>
+	<property name="JDBCPASSWORD" value="password"/>
+	<property name="HIBERNATEDIALECT" value="password"/>
+	<property name="embedded" value="true"/>
+
+	<!-- Model reader -->
+	<component file="workflow/modelReader.mwe" inheritAll="true" />
+	
+	<!-- Generate entites and DAO -->
+	<!-- <component file="workflow/generatorDao.mwe" inheritAll="true" /> -->
+	
+</workflow>

@@ -1,0 +1,169 @@
+«IMPORT core»
+«DEFINE generate FOR Project »
+«FILE "/" + name.toLowerCase() + "/security/AccessPolicy.java"-»
+package org.imogene.android.«name.toLowerCase()».security;
+
+import fr.medes.android.database.sqlite.stmt.QueryBuilder;
+
+import java.util.List;
+
+import org.imogene.android.common.entity.ImogActor;
+import org.imogene.android.common.model.CardEntity;
+import org.imogene.android.common.model.FieldGroup;
+import org.imogene.android.common.profile.EntityProfile;
+import org.imogene.android.common.profile.FieldGroupProfile;
+import org.imogene.android.common.profile.Profile;
+import org.imogene.android.database.sqlite.ImogOpenHelper;
+import org.imogene.android.preference.Preferences;
+«FOREACH entities AS entity-»
+«IF Actor.isAssignableFrom(entity.metaType)-»
+import org.imogene.android.«name.toLowerCase()».database.sqlite.«entity.name.toFirstUpper()»Cursor;
+import org.imogene.android.«name.toLowerCase()».domain.«entity.name.toFirstUpper()»;
+«ENDIF-»
+«ENDFOREACH-»
+
+import android.content.Context;
+
+public class AccessPolicy {
+
+	«FOREACH entities AS e-»
+	private boolean canCreate«e.name.toFirstUpper()» = true;
+	private boolean canDelete«e.name.toFirstUpper()» = true;
+	private boolean canDirectAccess«e.name.toFirstUpper()» = true;
+	private boolean canExport«e.name.toFirstUpper()» = true;
+	«FOREACH e.groups AS g-»
+	private boolean canRead«e.name.toFirstUpper()»«g.name.toFirstUpper()» = true;
+	private boolean canWrite«e.name.toFirstUpper()»«g.name.toFirstUpper()» = true;
+	private boolean canExport«e.name.toFirstUpper()»«g.name.toFirstUpper()» = true;
+	«ENDFOREACH-»
+	«ENDFOREACH-»
+	
+	private static AccessPolicy sPolicy;
+	
+	public static synchronized AccessPolicy getPolicy(Context context) {
+		if (sPolicy == null) {
+			sPolicy = new AccessPolicy(context);
+		}
+		return sPolicy;
+	}
+	
+	private AccessPolicy(Context context) {
+		ImogActor actor = getSyncActor(context);
+		if (actor == null) {
+			return;
+		}
+		List<Profile> profiles = actor.getProfiles();
+		if (profiles != null) {
+			for (Profile profile : profiles) {
+				List<EntityProfile> entityProfiles = profile.getEntityProfiles();
+				if (entityProfiles != null) {
+					for (EntityProfile entityProfile : entityProfiles) {
+						String id = entityProfile.getEntity().getId();
+						«FOREACH entities AS e SEPARATOR " else "-»
+						if ("«e.name.toLowerCase()»".equals(id)) {
+							if (entityProfile.getCreate() != null) {
+								canCreate«e.name.toFirstUpper()» &= entityProfile.getCreate();
+							}
+							if (entityProfile.getDelete() != null) {
+								canDelete«e.name.toFirstUpper()» &= entityProfile.getDelete();
+							}
+							if (entityProfile.getDirectAccess() != null) {
+								canDirectAccess«e.name.toFirstUpper()» &= entityProfile.getDirectAccess();
+							}
+							if (entityProfile.getExport() != null) {
+								canExport«e.name.toFirstUpper()» &= entityProfile.getExport();
+							}
+						}
+						«ENDFOREACH-»
+					}
+				}
+				List<FieldGroupProfile> fieldGroupProfiles = profile.getFieldGroupProfiles();
+				if (fieldGroupProfiles != null) {
+					for (FieldGroupProfile fieldGroupProfile : fieldGroupProfiles) {
+						String id = fieldGroupProfile.getFieldGroup().getId();
+						«FOREACH entities.groups AS g SEPARATOR " else "-»
+						if ("«g.parentCard.name.toLowerCase()».«g.name.toLowerCase()»".equals(id)) {
+							if (fieldGroupProfile.getRead() != null) {
+								canRead«g.parentCard.name.toFirstUpper()»«g.name.toFirstUpper()» &= fieldGroupProfile.getRead();
+							}
+							if (fieldGroupProfile.getWrite() != null) {
+								canWrite«g.parentCard.name.toFirstUpper()»«g.name.toFirstUpper()» &= fieldGroupProfile.getWrite();
+							}
+							if (fieldGroupProfile.getExport() != null) {
+								canExport«g.parentCard.name.toFirstUpper()»«g.name.toFirstUpper()» &= fieldGroupProfile.getExport();
+							}
+						}
+						«ENDFOREACH-»
+					}
+				}
+			}
+		}
+	}
+	
+	public ImogActor getSyncActor(Context context) {
+		String login = Preferences.getPreferences(context).getSyncLogin();
+		if (login == null) {
+			return null;
+		}
+		«FOREACH entities AS e-»
+		«IF Actor.isAssignableFrom(e.metaType)-»
+		{
+		QueryBuilder builder = ImogOpenHelper.getHelper().queryBuilder(«e.name.toFirstUpper()».Columns.CONTENT_URI);
+		builder.where().eq(«e.name.toFirstUpper()».Columns.LOGIN, login);
+		«e.name.toFirstUpper()»Cursor cursor = («e.name.toFirstUpper()»Cursor) builder.query();
+		try {
+			if (cursor.moveToFirst()) {
+				return cursor.newBean();
+			}
+		} finally {
+			cursor.close();
+		}
+		}
+		«ENDIF-»
+		«ENDFOREACH-»
+		return null;	
+	}
+	
+	«FOREACH entities AS e-»
+	public boolean canRead«e.name.toFirstUpper()»() {
+		return «FOREACH e.groups AS g SEPARATOR ' || '»canRead«e.name.toFirstUpper()»«g.name.toFirstUpper()»«ENDFOREACH»;
+	}
+	
+	public boolean canEdit«e.name.toFirstUpper()»() {
+		return «FOREACH e.groups AS g SEPARATOR ' || '»canWrite«e.name.toFirstUpper()»«g.name.toFirstUpper()»«ENDFOREACH»;
+	}
+
+	public boolean canCreate«e.name.toFirstUpper()»() {
+		return canCreate«e.name.toFirstUpper()»;
+	}
+
+	public boolean canDelete«e.name.toFirstUpper()»() {
+		return canDelete«e.name.toFirstUpper()»;
+	}
+
+	public boolean canDirectAccess«e.name.toFirstUpper()»() {
+		return canDirectAccess«e.name.toFirstUpper()»;
+	}
+
+	public boolean canExport«e.name.toFirstUpper()»() {
+		return canExport«e.name.toFirstUpper()»;
+	}
+
+	«FOREACH e.groups AS g-»
+	public boolean canRead«e.name.toFirstUpper()»«g.name.toFirstUpper()»() {
+		return canRead«e.name.toFirstUpper()»«g.name.toFirstUpper()»;
+	}
+
+	public boolean canEdit«e.name.toFirstUpper()»«g.name.toFirstUpper()»() {
+		return canWrite«e.name.toFirstUpper()»«g.name.toFirstUpper()»;
+	}
+
+	public boolean canExport«e.name.toFirstUpper()»«g.name.toFirstUpper()»() {
+		return canExport«e.name.toFirstUpper()»«g.name.toFirstUpper()»;
+	}
+	«ENDFOREACH-»
+	«ENDFOREACH-»
+
+}
+«ENDFILE»
+«ENDDEFINE»

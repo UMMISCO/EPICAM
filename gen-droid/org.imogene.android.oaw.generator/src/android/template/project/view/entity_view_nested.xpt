@@ -1,0 +1,80 @@
+«IMPORT core»
+«EXTENSION template::CommonFieldUtilExt»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+«DEFINE generate(String projectName) FOR CardEntity»
+«IF isNested((Project) eContainer, this)»
+«FILE "/widget/field/view/" + name.toFirstUpper() + "NestedView.java"»
+package org.imogene.android.widget.field.view;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.net.Uri;
+import android.util.AttributeSet;
+
+import org.imogene.android.widget.field.FieldManager;
+import org.imogene.android.widget.field.view.*;
+import org.imogene.android.«projectName.toLowerCase()».R;
+import org.imogene.android.«projectName.toLowerCase()».domain.*;
+import org.imogene.android.«projectName.toLowerCase()».security.AccessPolicy;
+
+public class «name.toFirstUpper()»NestedView extends RelationOneFieldView<«name.toFirstUpper()»> {
+«LET getNestedFields() AS fields-»
+
+	«FOREACH fields AS f-»
+	private «EXPAND android::template::ViewerUtils::classInClass FOR f» «f.name.toFirstLower()»;
+	«ENDFOREACH»
+	
+	private AccessPolicy mPolicy;
+	
+	public «name.toFirstUpper()»NestedView(Context context, AttributeSet attrs) {
+		super(context, attrs, R.layout.«name.toLowerCase()»_view_nested);
+
+		«FOREACH fields AS f-»
+		«f.name.toFirstLower()» = («EXPAND android::template::ViewerUtils::classInClass FOR f») findViewById(R.id.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR f»);
+		«ENDFOREACH-»
+	
+		«FOREACH fields AS f-»
+		«EXPAND android::template::ViewerUtils::specificInit FOR f-»
+		«EXPAND android::template::ViewerUtils::dependency FOREACH f.fieldDependentVisibility-»
+		«ENDFOREACH»
+		
+		setOnClickListener(null);
+		«REM»
+		«FOREACH groups AS group»
+		if (mPolicy.canRead«name.toFirstUpper()»«group.name.toFirstUpper()»() ||
+			mPolicy.canEdit«name.toFirstUpper()»«group.name.toFirstUpper()»()) {
+			adapter.addPage(R.string.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR group», R.id.«EXPAND android::template::MedooAndroidFieldUtil::resourceName FOR group»);
+
+			if (!mPolicy.canEdit«name.toFirstUpper()»«group.name.toFirstUpper()»()) {
+				«FOREACH group.fields AS f-»
+				«f.name.toFirstLower()».setReadOnly(true);
+				«ENDFOREACH-»
+			}
+		}
+		«ENDFOREACH»
+		«ENDREM»
+	}
+	
+	@Override
+	public void onAttachedToHierarchy(FieldManager manager) {
+		super.onAttachedToHierarchy(manager);
+		«FOREACH fields AS f-»
+		«f.name.toFirstLower()».onAttachedToHierarchy(manager);
+		«ENDFOREACH-»
+	}
+	
+	@Override
+	public void setValueInternal(«name.toFirstUpper()» value, boolean notifyChange) {
+		super.setValueInternal(value, notifyChange);
+		«FOREACH fields AS f-»
+		«f.name.toFirstLower()».setValueInternal(value != null ? value.get«f.name.toFirstUpper()»() : null, notifyChange);
+		«ENDFOREACH»
+	}
+	
+«ENDLET-»
+}
+«ENDFILE»
+«ENDIF»
+«ENDDEFINE»

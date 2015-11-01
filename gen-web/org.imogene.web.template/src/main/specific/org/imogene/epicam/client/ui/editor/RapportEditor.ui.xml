@@ -1,0 +1,101 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui' 
+	xmlns:imo='urn:import:org.imogene.web.client.ui.field'
+	xmlns:imo1='urn:import:org.imogene.web.client.ui.field.relation.single'
+	xmlns:imo2='urn:import:org.imogene.web.client.ui.field.relation.multi'
+	xmlns:imo3="urn:import:org.imogene.web.client.ui.field.group"
+	xmlns:imo4="urn:import:org.imogene.web.client.ui.field.binary"
+	>		
+	
+
+	<ui:style>
+		.imogene-form {
+			width: 100%;
+			vertical-align: top;
+		}
+		
+		.imogene-fieldTable {
+			width: 100%;
+			border-spacing: 10px 0px;
+		}
+		
+		.imogene-field {
+			margin-left: 10px;
+		}
+		
+		@if user.agent ie6 ie8 ie9 {
+			.dependentVisibility {
+				margin-left: 20px;
+				font-style: italic;
+			}
+		}
+		@else {
+			.dependentVisibility {
+				padding-left: 20px;
+				background: url(images/arrow-18.png) no-repeat;
+				background-position: 0% 50%;	
+			}
+		}
+
+		@external .dependentVisibility;
+	</ui:style>
+
+
+	<g:VerticalPanel stylePrimaryName="{style.imogene-form}">
+	
+	
+	<!-- Filtre section widgets -->
+		<imo3:FieldGroupPanel ui:field="filtreSection">
+	
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo:ImogSingleEnumBox ui:field="typeRapport" />
+			</g:SimplePanel>
+			
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo1:ImogSingleRelationBox ui:field="region" />
+			</g:SimplePanel>
+			
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo1:ImogSingleRelationBox ui:field="district" />
+			</g:SimplePanel>
+
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo1:ImogSingleRelationBox ui:field="cdt" />
+			</g:SimplePanel>
+			
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo1:ImogSingleRelationBox ui:field="personnel" />
+			</g:SimplePanel>
+			
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo1:ImogSingleRelationBox ui:field="laboratoire" />
+			</g:SimplePanel>
+			
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo1:ImogSingleRelationBox ui:field="patient" />
+			</g:SimplePanel>
+			
+		</imo3:FieldGroupPanel>	
+	
+	<!-- Periode section widgets -->
+		<imo3:FieldGroupPanel ui:field="periodeSection">
+	
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo:ImogSingleEnumBox ui:field="trimestre" />
+			</g:SimplePanel>
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo:ImogTextBox ui:field="annee" />
+			</g:SimplePanel>
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo:ImogDateBox ui:field="date_debut" />
+			</g:SimplePanel>
+			<g:SimplePanel stylePrimaryName="{style.imogene-field}">
+				<imo:ImogDateBox ui:field="date_fin" />
+			</g:SimplePanel>
+
+		</imo3:FieldGroupPanel>	
+	
+	</g:VerticalPanel>
+	
+</ui:UiBinder>
+	

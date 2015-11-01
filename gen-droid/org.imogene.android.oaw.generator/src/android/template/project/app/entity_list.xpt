@@ -1,0 +1,509 @@
+«IMPORT core»
+«EXTENSION android::template::MedooAndroidFieldUtilExt»
+«DEFINE generate(String projectName) FOR CardEntity»
+«FILE "/" + projectName.toLowerCase() + "/app/" + name.toFirstUpper() + "List.java"»
+package org.imogene.android.«projectName.toLowerCase()-».app;
+
+import java.util.ArrayList;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.SparseBooleanArray;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ArrayAdapter;
+import android.widget.FilterQueryProvider;
+import android.widget.ListView;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.SearchView;
+
+import fr.medes.android.database.sqlite.stmt.QueryBuilder;
+import fr.medes.android.database.sqlite.stmt.Where;
+import fr.medes.android.util.content.ContentUrisUtils;
+
+import org.imogene.android.Constants.Categories;
+import org.imogene.android.Constants.Extras;
+import org.imogene.android.database.sqlite.ImogOpenHelper;
+import org.imogene.android.notification.NotificationController;
+import org.imogene.android.preference.Preferences;
+import org.imogene.android.sync.SyncManager;
+import org.imogene.android.util.DatabaseUtils;
+import org.imogene.android.util.DialogFactory;
+import org.imogene.android.util.IamLost;
+import org.imogene.android.widget.ImogBeanCursorAdapter;
+import org.imogene.android.«projectName.toLowerCase()».R;
+import org.imogene.android.«projectName.toLowerCase()».database.sqlite.«name.toFirstUpper()»Cursor;
+import org.imogene.android.«projectName.toLowerCase()».domain.«name.toFirstUpper()»;
+import org.imogene.android.«projectName.toLowerCase()».security.AccessPolicy;
+
+public class «name.toFirstUpper()»List extends SherlockListActivity implements
+		View.OnClickListener,
+		OnNavigationListener,
+		FilterQueryProvider,
+		SearchView.OnQueryTextListener {
+
+
+	// Extras keys
+	private static final String EXTRA_CURRENT_URI = "AbstractEntityListing_currentUri";
+
+	// Context menu ids
+	private static final int CMENU_DELETE_ID = Menu.FIRST;
+	private static final int CMENU_EDIT_ID = Menu.FIRST + 1;
+	private static final int CMENU_VIEW_ID = Menu.FIRST + 2;
+	private static final int CMENU_MARK_AS_READ_ID = Menu.FIRST + 3;
+	private static final int CMENU_MARK_AS_UNREAD_ID = Menu.FIRST + 4;
+	
+	// Dialog ids
+	private static final int DIALOG_DELETE_ID = 1;
+	private static final int DIALOG_IAMLOST_ID = 2;
+
+	// Activity request code
+	private static final int ACTIVITY_INSERT = 1;
+	
+	private «name.toFirstUpper()»Cursor mCursor;
+	private ImogBeanCursorAdapter mAdapter;
+
+	private AccessPolicy mPolicy;
+
+	private String mWhereClause = null;
+	private Object[] mWhereArgs = null;
+	private String mSortKey = «name.toFirstUpper()».Columns.MODIFIED;
+	private boolean mAscending = false;
+
+	private Uri mCurrentUri;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.imog__list_content);
+		
+		mPolicy = AccessPolicy.getPolicy(this);
+		
+		IamLost.getInstance().add(getTitle().toString());
+
+		if (getIntent().hasExtra(Extras.EXTRA_WHERE)) {
+			mWhereClause = getIntent().getStringExtra(Extras.EXTRA_WHERE);
+			mWhereArgs = getIntent().getStringArrayExtra(Extras.EXTRA_ARGS);
+		}
+
+		if (getIntent().hasExtra(Extras.EXTRA_SORT_KEY)) {
+			mSortKey = getIntent().getStringExtra(Extras.EXTRA_SORT_KEY);
+		}
+
+		if (getIntent().hasExtra(Extras.EXTRA_ASCENDING)) {
+			mAscending = getIntent().getBooleanExtra(Extras.EXTRA_ASCENDING, false);
+		}
+
+		if (savedInstanceState != null) {
+			mSortKey = savedInstanceState.getString(Extras.EXTRA_SORT_KEY);
+			mAscending = savedInstanceState.getBoolean(Extras.EXTRA_ASCENDING);
+		}
+
+		boolean isMultiple = isMultipleSelection();
+
+		TextView empty = (TextView) findViewById(R.id.imog__emptyText);
+		empty.setText(R.string.imog__noEntityHelpText);
+		
+		mCursor = query(null);
+		startManagingCursor(mCursor);
+		
+		mAdapter = new ImogBeanCursorAdapter(this, mCursor, «name.toFirstUpper()».Columns.COLOR, isMultiple);
+		mAdapter.setFilterQueryProvider(this);
+		
+		setListAdapter(mAdapter);
+		
+		if (isMultiple) {
+			findViewById(R.id.imog__footer).setVisibility(View.VISIBLE);
+			findViewById(R.id.imog__saveButton).setOnClickListener(this);
+			findViewById(R.id.imog__discardButton).setOnClickListener(this);
+			
+			getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			if (getIntent().hasExtra(Extras.EXTRA_SELECTED)) {
+				ArrayList<String> selected = getIntent().getStringArrayListExtra(Extras.EXTRA_SELECTED);
+				for (int i = 0; i < mAdapter.getCount(); i++) {
+					if (selected.contains(mAdapter.getItemStringId(i))) {
+						getListView().setItemChecked(i, true);
+					}
+				}
+			}
+		}
+
+		registerForContextMenu(getListView());
+		
+		SpinnerAdapter adapter = ArrayAdapter.createFromResource(
+			this, 
+			R.array.«name.toLowerCase()»_sortby,
+			android.R.layout.simple_spinner_dropdown_item);
+		
+		final ActionBar actionBar = getSupportActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		actionBar.setListNavigationCallbacks(adapter, this);
+		if (!isActionBarEnabled()) {
+			actionBar.hide();
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		adjustMessageNotification(true);
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		adjustMessageNotification(false);
+	}
+	
+	protected boolean isMultipleSelection() {
+		final Intent intent = getIntent();
+		return Intent.ACTION_PICK.equals(intent.getAction()) && intent.hasExtra(Extras.EXTRA_MULTIPLE);
+	}
+	
+	protected boolean isActionBarEnabled() {
+		return getIntent().getAction() != null;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		IamLost.getInstance().remove();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString(Extras.EXTRA_SORT_KEY, mSortKey);
+		outState.putBoolean(Extras.EXTRA_ASCENDING, mAscending);
+		outState.putParcelable(EXTRA_CURRENT_URI, mCurrentUri);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle state) {
+		super.onRestoreInstanceState(state);
+		mCurrentUri = state.getParcelable(EXTRA_CURRENT_URI);
+	}
+	
+	private void adjustMessageNotification(boolean suspend) {
+		NotificationController notifier = NotificationController.getInstance(this);
+		notifier.suspendMessageNotification(suspend, «name.toFirstUpper()».Columns.NOTIFICATION_ID);
+    }
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		if (!getIntent().hasExtra(Extras.EXTRA_MULTIPLE)) {
+			Uri uri = ContentUrisUtils.withAppendedId(«name.toFirstUpper()-».Columns.CONTENT_URI, mAdapter.getItemStringId(position));
+			if (Intent.ACTION_PICK.equals(getIntent().getAction())) {
+				setResult(RESULT_OK, new Intent().setData(uri));
+				finish();
+			} else {
+				startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			}
+		}
+	}
+	
+	@Override
+	public boolean onNavigationItemSelected(int position, long itemId) {
+		switch (position) {
+		case 0:
+			mSortKey = «name.toFirstUpper()».Columns.MODIFIED;
+			mAscending = false;
+			requery();
+			return true;
+		«LET (Collection[FieldEntity]) {} AS list-»
+		«FOREACH list.addAll(getMainFields(this).addAll(secondaryFields)) AS f ITERATOR iter-»
+		case «iter.counter1»:
+			«IF TextField.isAssignableFrom(f.metaType) && ((TextField) f).translatable-»
+			mSortKey = «EXPAND android::template::MedooAndroidFieldUtil::columnGetter FOR f»;
+			«ELSE-»
+			mSortKey = «EXPAND android::template::MedooAndroidFieldUtil::columnName FOR f»;
+			«ENDIF-»
+			mAscending = false;
+			requery();
+			return true;
+		«ENDFOREACH-»
+		«ENDLET-»
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.imog__menu_list, menu);
+		menu.findItem(R.id.imog__menu_add).setVisible(mPolicy.canCreate«name.toFirstUpper()»());
+		
+		SearchView searchView = (SearchView) menu.findItem(R.id.imog__menu_search).getActionView();
+		if (searchView != null) {
+			// Don't know what it is for, just in case one day the search do not work anymore
+			// SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+			// searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+			// searchView.setIconifiedByDefault(false);
+			searchView.setOnQueryTextListener(this);
+		}
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.imog__menu_add :
+			boolean wizard = Preferences.getPreferences(this).isWizardEnabled();
+			Intent intent = new Intent(Intent.ACTION_INSERT, «name.toFirstUpper()».Columns.CONTENT_URI);
+			intent.putExtras(getIntent());
+			intent.addCategory(wizard ? Categories.CATEGORY_WIZARD : Categories.CATEGORY_CLASSIC);
+			if (Intent.ACTION_PICK.equals(getIntent().getAction())) {
+				startActivityForResult(intent, ACTIVITY_INSERT);
+			} else {
+				startActivity(intent);
+			}
+			return true;
+		case R.id.imog__menu_sync :
+			SyncManager.startManualSync(this);
+			return true;
+		case R.id.imog__menu_iamlost :
+			showDialog(DIALOG_IAMLOST_ID);
+			return true;
+		case R.id.imog__menu_markall :
+			DatabaseUtils.markRead(getContentResolver(), «name.toFirstUpper()».Columns.CONTENT_URI, true);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuInfo;
+		if (info.id < 0)
+			return;
+
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(Menu.NONE, CMENU_VIEW_ID, Menu.NONE, R.string.imog__menu_view);
+		if (mPolicy.canEdit«name.toFirstUpper()»()) {
+			menu.add(Menu.NONE, CMENU_EDIT_ID, Menu.NONE, R.string.imog__menu_edit);
+		}
+		if (mPolicy.canDelete«name.toFirstUpper()»()) {
+			menu.add(Menu.NONE, CMENU_DELETE_ID, Menu.NONE, R.string.imog__menu_delete);
+		}
+
+		«name.toFirstUpper()»Cursor c = («name.toFirstUpper()»Cursor) getListAdapter().getItem(
+				info.position - getListView().getHeaderViewsCount());
+		if (c.getFlagRead()) {
+			menu.add(Menu.NONE, CMENU_MARK_AS_UNREAD_ID, Menu.NONE, R.string.imog__menu_mark_as_unread);
+		} else {
+			menu.add(Menu.NONE, CMENU_MARK_AS_READ_ID, Menu.NONE, R.string.imog__menu_mark_as_read);
+		}
+	}
+
+	@Override
+	public boolean onContextItemSelected(android.view.MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		Uri uri = ContentUrisUtils.withAppendedId(«name.toFirstUpper()-».Columns.CONTENT_URI, mAdapter.getItemStringId(info.position));
+		switch (item.getItemId()) {
+		case CMENU_DELETE_ID:
+			mCurrentUri = uri;
+			showDialog(DIALOG_DELETE_ID);
+			return true;
+		case CMENU_EDIT_ID:
+			startActivity(new Intent(Intent.ACTION_EDIT, uri));
+			return true;
+		case CMENU_VIEW_ID:
+			startActivity(new Intent(Intent.ACTION_VIEW, uri));
+			return true;
+		case CMENU_MARK_AS_READ_ID:
+			DatabaseUtils.markRead(getContentResolver(), uri, true);
+			return true;
+		case CMENU_MARK_AS_UNREAD_ID:
+			DatabaseUtils.markRead(getContentResolver(), uri, false);
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DIALOG_DELETE_ID:
+			return new AlertDialog.Builder(this)
+			.setTitle(R.string.imog__menu_delete)
+			.setMessage(R.string.imog__delete_confirmation)
+			.setNegativeButton(android.R.string.cancel, null)
+			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					DatabaseUtils.delete(«name.toFirstUpper()»List.this, mCurrentUri);
+				}
+			})
+			.setCancelable(false)
+			.create();
+		case DIALOG_IAMLOST_ID:
+			return DialogFactory.createIamLostDialog(this);
+		default:
+			return super.onCreateDialog(id);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == ACTIVITY_INSERT && resultCode == RESULT_OK) {
+			if (isMultipleSelection()) {
+				String id = data.getData().getLastPathSegment();
+				for (int i = 0; i < mAdapter.getCount(); i++) {
+					if (id.equals(mAdapter.getItemStringId(i))) {
+						getListView().setItemChecked(i, true);
+					}
+				}
+			} else {
+				setResult(RESULT_OK, data);
+				finish();
+			}
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+	
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.imog__saveButton:
+			ListView list = getListView();
+			SparseBooleanArray spa = list.getCheckedItemPositions();
+			ArrayList<String> ids = null;
+			if (spa.size() != 0) {
+				for (int i = 0; i < mAdapter.getCount(); i++) {
+					if (spa.get(i)) {
+						String id = mAdapter.getItemStringId(i);
+						if (id != null) {
+							if (ids == null) {
+								ids = new ArrayList<String>();
+							}
+							ids.add(id);
+						}
+					}
+				}
+			}
+			Intent data = new Intent().putStringArrayListExtra(Extras.EXTRA_SELECTED, ids);
+			setResult(RESULT_OK, data);
+			finish();
+			break;
+		case R.id.imog__discardButton:
+			setResult(RESULT_CANCELED);
+			finish();
+			break;
+		}
+	}
+	
+	// Query and filters
+
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		mAdapter.getFilter().filter(newText);
+		return true;
+	}
+
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+		mAdapter.getFilter().filter(query);
+		return true;
+	}
+	
+	@Override
+	public Cursor runQuery(CharSequence constraint) {
+		stopManagingCursor(mCursor);
+		mCursor = query(constraint);
+		startManagingCursor(mCursor);
+		return mCursor;
+	}
+
+	private «name.toFirstUpper()»Cursor query(CharSequence constraint) {
+		QueryBuilder builder = ImogOpenHelper.getHelper().queryBuilder(«name.toFirstUpper()».Columns.CONTENT_URI);
+		Where where = builder.where();
+		if (mWhereClause != null) {
+			where.raw(mWhereClause, mWhereArgs).and();			
+		}
+		buildWhereClause(where, constraint, true);
+		builder.orderBy(mSortKey, mAscending);
+		return builder.query();
+	}
+	
+	private void requery() {
+		stopManagingCursor(mCursor);
+		mCursor = query(null);
+		startManagingCursor(mCursor);
+		mAdapter.changeCursor(mCursor);
+	}
+	
+	private static void buildWhereClause(Where where, CharSequence constraint, boolean allFields) {
+		where.ne(«name.toFirstUpper()».Columns.MODIFIEDFROM, «name.toFirstUpper()».Columns.SYNC_SYSTEM);
+		where.and().isNull(«name.toFirstUpper()».Columns.DELETED);
+		if (constraint != null) {
+			int numClauses = 0;
+			Where subWhere = new Where();
+			«EXPAND buildWhereClause FOREACH mainFields-»
+			if (allFields) {
+				«EXPAND buildWhereClause FOREACH secondaryFields-»
+			}
+			if (numClauses > 0) {
+				subWhere.or(numClauses);
+				where.and();
+				where.clause(subWhere);
+			}
+		}
+	}
+	
+	public static QueryBuilder buildSubQueryBuilder(CharSequence constraint) {
+		QueryBuilder subQueryBuilder = ImogOpenHelper.getHelper().queryBuilder(«name.toFirstUpper()».Columns.TABLE_NAME);
+		subQueryBuilder.selectColumns(«name.toFirstUpper()».Columns._ID);
+		buildWhereClause(subQueryBuilder.where(), constraint, false);
+		return subQueryBuilder;
+	}
+
+}
+«ENDFILE-»
+«ENDDEFINE»
+
+
+«DEFINE buildWhereClause FOR FieldEntity-»
+«ENDDEFINE»
+
+«DEFINE buildWhereClause FOR TextField-»
+«IF translatable-»
+subWhere.like(«parentGroup.parentCard.name.toFirstUpper()».Columns.get«name.toFirstUpper()»Column(), '%' + constraint.toString() + '%');
+numClauses++;
+«ELSE-»
+subWhere.like(«parentGroup.parentCard.name.toFirstUpper()».Columns.«name.toUpperCase()», '%' + constraint.toString() + '%');
+numClauses++;
+«ENDIF-»
+«ENDDEFINE»
+
+«DEFINE buildWhereClause FOR StringField-»
+subWhere.like(«parentGroup.parentCard.name.toFirstUpper()».Columns.«name.toUpperCase()», '%' + constraint.toString() + '%');
+numClauses++;
+«ENDDEFINE»
+
+«DEFINE buildWhereClause FOR RelationFieldEntity-»
+«IF cardinality == 1-»
+subWhere.in(«parentGroup.parentCard.name.toFirstUpper()».Columns.«name.toUpperCase()», «entity.name.toFirstUpper()»List.buildSubQueryBuilder(constraint));
+numClauses++;
+«ENDIF-»
+«ENDDEFINE»
